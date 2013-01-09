@@ -242,12 +242,12 @@
     <buildtargets>
         <buildtarget buildtool="Linker" name="BuiltinDefaultCode" passed="false" targetname="BuiltinDefaultCode">
             <contents>
-                <buildtargetreference name="/BuiltinDefaultCode/BuiltinDefaultCode_partialImage"/>
+                <buildtargetreference name="/LearningCode/BuiltinDefaultCode_partialImage"/>
             </contents>
         </buildtarget>
         <buildtarget buildtool="Partial Image Linker" name="BuiltinDefaultCode_partialImage" passed="true" targetname="BuiltinDefaultCode_partialImage">
             <contents>
-                <folder name="/BuiltinDefaultCode" recursive="true"/>
+                <folder name="/LearningCode" recursive="true"/>
             </contents>
         </buildtarget>
     </buildtargets>
