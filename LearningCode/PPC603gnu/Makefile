@@ -31,7 +31,7 @@ else
 MODE_DIR := NonDebug
 endif
 OBJ_DIR := .
-PRJ_ROOT_DIR := C:/WindRiver/workspace/BuiltinDefaultCode
+PRJ_ROOT_DIR := C:/WindRiver/workspace/Metrobots2013/LearningCode
 WS_ROOT_DIR := C:/WindRiver/workspace
 
 
@@ -77,104 +77,104 @@ endif
 
 
 #Project Targets
-PROJECT_TARGETS = BuiltinDefaultCode/$(MODE_DIR)/BuiltinDefaultCode.out \
-	 BuiltinDefaultCode_partialImage/$(MODE_DIR)/BuiltinDefaultCode_partialImage.o
+PROJECT_TARGETS = LearningCode/$(MODE_DIR)/Learningcode.out \
+	 LearningCode_partialImage/$(MODE_DIR)/LearningCode_partialImage.o
 
 
 #Rules
 
-# BuiltinDefaultCode
+# LearningCode
 ifeq ($(DEBUG_MODE),1)
-BuiltinDefaultCode/$(MODE_DIR)/% : DEBUGFLAGS_C-Compiler = -g
-BuiltinDefaultCode/$(MODE_DIR)/% : DEBUGFLAGS_C++-Compiler = -g
-BuiltinDefaultCode/$(MODE_DIR)/% : DEBUGFLAGS_Linker = -g
-BuiltinDefaultCode/$(MODE_DIR)/% : DEBUGFLAGS_Partial-Image-Linker = 
-BuiltinDefaultCode/$(MODE_DIR)/% : DEBUGFLAGS_Librarian = 
-BuiltinDefaultCode/$(MODE_DIR)/% : DEBUGFLAGS_Assembler = -g
+LearningCode/$(MODE_DIR)/% : DEBUGFLAGS_C-Compiler = -g
+LearningCode/$(MODE_DIR)/% : DEBUGFLAGS_C++-Compiler = -g
+LearningCode/$(MODE_DIR)/% : DEBUGFLAGS_Linker = -g
+LearningCode/$(MODE_DIR)/% : DEBUGFLAGS_Partial-Image-Linker = 
+LearningCode/$(MODE_DIR)/% : DEBUGFLAGS_Librarian = 
+LearningCode/$(MODE_DIR)/% : DEBUGFLAGS_Assembler = -g
 else
-BuiltinDefaultCode/$(MODE_DIR)/% : DEBUGFLAGS_C-Compiler = -O2 -fstrength-reduce -fno-builtin
-BuiltinDefaultCode/$(MODE_DIR)/% : DEBUGFLAGS_C++-Compiler = -O2 -fstrength-reduce -fno-builtin
-BuiltinDefaultCode/$(MODE_DIR)/% : DEBUGFLAGS_Linker = -O2 -fstrength-reduce -fno-builtin
-BuiltinDefaultCode/$(MODE_DIR)/% : DEBUGFLAGS_Partial-Image-Linker = 
-BuiltinDefaultCode/$(MODE_DIR)/% : DEBUGFLAGS_Librarian = 
-BuiltinDefaultCode/$(MODE_DIR)/% : DEBUGFLAGS_Assembler = -O2 -fstrength-reduce -fno-builtin
+LearningCode/$(MODE_DIR)/% : DEBUGFLAGS_C-Compiler = -O2 -fstrength-reduce -fno-builtin
+LearningCode/$(MODE_DIR)/% : DEBUGFLAGS_C++-Compiler = -O2 -fstrength-reduce -fno-builtin
+LearningCode/$(MODE_DIR)/% : DEBUGFLAGS_Linker = -O2 -fstrength-reduce -fno-builtin
+LearningCode/$(MODE_DIR)/% : DEBUGFLAGS_Partial-Image-Linker = 
+LearningCode/$(MODE_DIR)/% : DEBUGFLAGS_Librarian = 
+LearningCode/$(MODE_DIR)/% : DEBUGFLAGS_Assembler = -O2 -fstrength-reduce -fno-builtin
 endif
-BuiltinDefaultCode/$(MODE_DIR)/% : IDE_INCLUDES = -I$(WIND_BASE)/target/h/WPILib -I$(WIND_BASE)/target/h -I$(WIND_BASE)/target/h/wrn/coreip 
-BuiltinDefaultCode/$(MODE_DIR)/% : IDE_LIBRARIES = $(WIND_BASE)/target/lib/WPILib.a 
-BuiltinDefaultCode/$(MODE_DIR)/% : PROJECT_TYPE = DKM
-BuiltinDefaultCode/$(MODE_DIR)/% : DEFINES = 
-BuiltinDefaultCode/$(MODE_DIR)/% : EXPAND_DBG = 0
-BuiltinDefaultCode/$(MODE_DIR)/% : VX_CPU_FAMILY = ppc
-BuiltinDefaultCode/$(MODE_DIR)/% : CPU = PPC603
-BuiltinDefaultCode/$(MODE_DIR)/% : TOOL_FAMILY = gnu
-BuiltinDefaultCode/$(MODE_DIR)/% : TOOL = gnu
-BuiltinDefaultCode/$(MODE_DIR)/% : TOOL_PATH = 
-BuiltinDefaultCode/$(MODE_DIR)/% : CC_ARCH_SPEC = -mcpu=603 -mstrict-align -mno-implicit-fp -mlongcall
-BuiltinDefaultCode/$(MODE_DIR)/% : LIBPATH = 
-BuiltinDefaultCode/$(MODE_DIR)/% : LIBS = 
-BuiltinDefaultCode/$(MODE_DIR)/% : OBJ_DIR := BuiltinDefaultCode/$(MODE_DIR)
+LearningCode/$(MODE_DIR)/% : IDE_INCLUDES = -I$(WIND_BASE)/target/h/WPILib -I$(WIND_BASE)/target/h -I$(WIND_BASE)/target/h/wrn/coreip 
+LearningCode/$(MODE_DIR)/% : IDE_LIBRARIES = $(WIND_BASE)/target/lib/WPILib.a 
+LearningCode/$(MODE_DIR)/% : PROJECT_TYPE = DKM
+LearningCode/$(MODE_DIR)/% : DEFINES = 
+LearningCode/$(MODE_DIR)/% : EXPAND_DBG = 0
+LearningCode/$(MODE_DIR)/% : VX_CPU_FAMILY = ppc
+LearningCode/$(MODE_DIR)/% : CPU = PPC603
+LearningCode/$(MODE_DIR)/% : TOOL_FAMILY = gnu
+LearningCode/$(MODE_DIR)/% : TOOL = gnu
+LearningCode/$(MODE_DIR)/% : TOOL_PATH = 
+LearningCode/$(MODE_DIR)/% : CC_ARCH_SPEC = -mcpu=603 -mstrict-align -mno-implicit-fp -mlongcall
+LearningCode/$(MODE_DIR)/% : LIBPATH = 
+LearningCode/$(MODE_DIR)/% : LIBS = 
+LearningCode/$(MODE_DIR)/% : OBJ_DIR := LearningCode/$(MODE_DIR)
 
-OBJECTS_BuiltinDefaultCode = BuiltinDefaultCode_partialImage/$(MODE_DIR)/BuiltinDefaultCode_partialImage.o
+OBJECTS_LearningCode = LearningCode_partialImage/$(MODE_DIR)/LearningCode_partialImage.o
 
-BuiltinDefaultCode/$(MODE_DIR)/BuiltinDefaultCode.out : $(OBJECTS_BuiltinDefaultCode)
-	$(TRACE_FLAG)if [ ! -d "`dirname "$@"`" ]; then mkdir -p "`dirname "$@"`"; fi;echo "building $@";rm -f "$@";nmppc $(OBJECTS_BuiltinDefaultCode) $(IDE_LIBRARIES) | tclsh $(WIND_BASE)/host/resource/hutils/tcl/munch.tcl -c ppc > $(OBJ_DIR)/ctdt.c; $(TOOL_PATH)ccppc $(DEBUGFLAGS_Linker) $(CC_ARCH_SPEC) -fdollars-in-identifiers -Wall $(ADDED_CFLAGS) $(IDE_INCLUDES) $(ADDED_INCLUDES) -DCPU=$(CPU) -DTOOL_FAMILY=$(TOOL_FAMILY) -DTOOL=$(TOOL) -D_WRS_KERNEL   $(DEFINES)  -o $(OBJ_DIR)/ctdt.o -c $(OBJ_DIR)/ctdt.c; $(TOOL_PATH)ccppc -r -nostdlib -Wl,-X -T $(WIND_BASE)/target/h/tool/gnu/ldscripts/link.OUT -o "$@" $(OBJ_DIR)/ctdt.o $(OBJECTS_BuiltinDefaultCode) $(IDE_LIBRARIES) $(LIBPATH) $(LIBS)  $(ADDED_LIBPATH) $(ADDED_LIBS) && if [ "$(EXPAND_DBG)" = "1" ]; then plink "$@";fi
+LearningCode/$(MODE_DIR)/Learningcode.out : $(OBJECTS_LearningCode)
+	$(TRACE_FLAG)if [ ! -d "`dirname "$@"`" ]; then mkdir -p "`dirname "$@"`"; fi;echo "building $@";rm -f "$@";nmppc $(OBJECTS_LearningCode) $(IDE_LIBRARIES) | tclsh $(WIND_BASE)/host/resource/hutils/tcl/munch.tcl -c ppc > $(OBJ_DIR)/ctdt.c; $(TOOL_PATH)ccppc $(DEBUGFLAGS_Linker) $(CC_ARCH_SPEC) -fdollars-in-identifiers -Wall $(ADDED_CFLAGS) $(IDE_INCLUDES) $(ADDED_INCLUDES) -DCPU=$(CPU) -DTOOL_FAMILY=$(TOOL_FAMILY) -DTOOL=$(TOOL) -D_WRS_KERNEL   $(DEFINES)  -o $(OBJ_DIR)/ctdt.o -c $(OBJ_DIR)/ctdt.c; $(TOOL_PATH)ccppc -r -nostdlib -Wl,-X -T $(WIND_BASE)/target/h/tool/gnu/ldscripts/link.OUT -o "$@" $(OBJ_DIR)/ctdt.o $(OBJECTS_LearningCode) $(IDE_LIBRARIES) $(LIBPATH) $(LIBS)  $(ADDED_LIBPATH) $(ADDED_LIBS) && if [ "$(EXPAND_DBG)" = "1" ]; then plink "$@";fi
 
-BuiltinDefaultCode/$(MODE_DIR)/BuiltinDefaultCode_compile_file : $(FILE) ;
+LearningCode/$(MODE_DIR)/LearningCode_compile_file : $(FILE) ;
 
-_clean :: BuiltinDefaultCode/$(MODE_DIR)/BuiltinDefaultCode_clean
+_clean :: LearningCode/$(MODE_DIR)/LearningCode_clean
 
-BuiltinDefaultCode/$(MODE_DIR)/BuiltinDefaultCode_clean : 
-	$(TRACE_FLAG)if [ -d "BuiltinDefaultCode" ]; then cd "BuiltinDefaultCode"; rm -rf $(MODE_DIR); fi
+LearningCode/$(MODE_DIR)/LearningCode_clean : 
+	$(TRACE_FLAG)if [ -d "LearningCode" ]; then cd "LearningCode"; rm -rf $(MODE_DIR); fi
 
 
-# BuiltinDefaultCode_partialImage
+# LearningCode_partialImage
 ifeq ($(DEBUG_MODE),1)
-BuiltinDefaultCode_partialImage/$(MODE_DIR)/% : DEBUGFLAGS_C-Compiler = -g
-BuiltinDefaultCode_partialImage/$(MODE_DIR)/% : DEBUGFLAGS_C++-Compiler = -g
-BuiltinDefaultCode_partialImage/$(MODE_DIR)/% : DEBUGFLAGS_Linker = -g
-BuiltinDefaultCode_partialImage/$(MODE_DIR)/% : DEBUGFLAGS_Partial-Image-Linker = 
-BuiltinDefaultCode_partialImage/$(MODE_DIR)/% : DEBUGFLAGS_Librarian = 
-BuiltinDefaultCode_partialImage/$(MODE_DIR)/% : DEBUGFLAGS_Assembler = -g
+LearningCode_partialImage/$(MODE_DIR)/% : DEBUGFLAGS_C-Compiler = -g
+LearningCode_partialImage/$(MODE_DIR)/% : DEBUGFLAGS_C++-Compiler = -g
+LearningCode_partialImage/$(MODE_DIR)/% : DEBUGFLAGS_Linker = -g
+LearningCode_partialImage/$(MODE_DIR)/% : DEBUGFLAGS_Partial-Image-Linker = 
+LearningCode_partialImage/$(MODE_DIR)/% : DEBUGFLAGS_Librarian = 
+LearningCode_partialImage/$(MODE_DIR)/% : DEBUGFLAGS_Assembler = -g
 else
-BuiltinDefaultCode_partialImage/$(MODE_DIR)/% : DEBUGFLAGS_C-Compiler = -O2 -fstrength-reduce -fno-builtin
-BuiltinDefaultCode_partialImage/$(MODE_DIR)/% : DEBUGFLAGS_C++-Compiler = -O2 -fstrength-reduce -fno-builtin
-BuiltinDefaultCode_partialImage/$(MODE_DIR)/% : DEBUGFLAGS_Linker = -O2 -fstrength-reduce -fno-builtin
-BuiltinDefaultCode_partialImage/$(MODE_DIR)/% : DEBUGFLAGS_Partial-Image-Linker = 
-BuiltinDefaultCode_partialImage/$(MODE_DIR)/% : DEBUGFLAGS_Librarian = 
-BuiltinDefaultCode_partialImage/$(MODE_DIR)/% : DEBUGFLAGS_Assembler = -O2 -fstrength-reduce -fno-builtin
+LearningCode_partialImage/$(MODE_DIR)/% : DEBUGFLAGS_C-Compiler = -O2 -fstrength-reduce -fno-builtin
+LearningCode_partialImage/$(MODE_DIR)/% : DEBUGFLAGS_C++-Compiler = -O2 -fstrength-reduce -fno-builtin
+LearningCode_partialImage/$(MODE_DIR)/% : DEBUGFLAGS_Linker = -O2 -fstrength-reduce -fno-builtin
+LearningCode_partialImage/$(MODE_DIR)/% : DEBUGFLAGS_Partial-Image-Linker = 
+LearningCode_partialImage/$(MODE_DIR)/% : DEBUGFLAGS_Librarian = 
+LearningCode_partialImage/$(MODE_DIR)/% : DEBUGFLAGS_Assembler = -O2 -fstrength-reduce -fno-builtin
 endif
-BuiltinDefaultCode_partialImage/$(MODE_DIR)/% : IDE_INCLUDES = -I$(WIND_BASE)/target/h/WPILib -I$(WIND_BASE)/target/h -I$(WIND_BASE)/target/h/wrn/coreip 
-BuiltinDefaultCode_partialImage/$(MODE_DIR)/% : IDE_LIBRARIES = $(WIND_BASE)/target/lib/WPILib.a 
-BuiltinDefaultCode_partialImage/$(MODE_DIR)/% : PROJECT_TYPE = DKM
-BuiltinDefaultCode_partialImage/$(MODE_DIR)/% : DEFINES = 
-BuiltinDefaultCode_partialImage/$(MODE_DIR)/% : EXPAND_DBG = 0
-BuiltinDefaultCode_partialImage/$(MODE_DIR)/% : VX_CPU_FAMILY = ppc
-BuiltinDefaultCode_partialImage/$(MODE_DIR)/% : CPU = PPC603
-BuiltinDefaultCode_partialImage/$(MODE_DIR)/% : TOOL_FAMILY = gnu
-BuiltinDefaultCode_partialImage/$(MODE_DIR)/% : TOOL = gnu
-BuiltinDefaultCode_partialImage/$(MODE_DIR)/% : TOOL_PATH = 
-BuiltinDefaultCode_partialImage/$(MODE_DIR)/% : CC_ARCH_SPEC = -mcpu=603 -mstrict-align -mno-implicit-fp -mlongcall
-BuiltinDefaultCode_partialImage/$(MODE_DIR)/% : LIBPATH = 
-BuiltinDefaultCode_partialImage/$(MODE_DIR)/% : LIBS = 
-BuiltinDefaultCode_partialImage/$(MODE_DIR)/% : OBJ_DIR := BuiltinDefaultCode_partialImage/$(MODE_DIR)
+LearningCode_partialImage/$(MODE_DIR)/% : IDE_INCLUDES = -I$(WIND_BASE)/target/h/WPILib -I$(WIND_BASE)/target/h -I$(WIND_BASE)/target/h/wrn/coreip 
+LearningCode_partialImage/$(MODE_DIR)/% : IDE_LIBRARIES = $(WIND_BASE)/target/lib/WPILib.a 
+LearningCode_partialImage/$(MODE_DIR)/% : PROJECT_TYPE = DKM
+LearningCode_partialImage/$(MODE_DIR)/% : DEFINES = 
+LearningCode_partialImage/$(MODE_DIR)/% : EXPAND_DBG = 0
+LearningCode_partialImage/$(MODE_DIR)/% : VX_CPU_FAMILY = ppc
+LearningCode_partialImage/$(MODE_DIR)/% : CPU = PPC603
+LearningCode_partialImage/$(MODE_DIR)/% : TOOL_FAMILY = gnu
+LearningCode_partialImage/$(MODE_DIR)/% : TOOL = gnu
+LearningCode_partialImage/$(MODE_DIR)/% : TOOL_PATH = 
+LearningCode_partialImage/$(MODE_DIR)/% : CC_ARCH_SPEC = -mcpu=603 -mstrict-align -mno-implicit-fp -mlongcall
+LearningCode_partialImage/$(MODE_DIR)/% : LIBPATH = 
+LearningCode_partialImage/$(MODE_DIR)/% : LIBS = 
+LearningCode_partialImage/$(MODE_DIR)/% : OBJ_DIR := LearningCode_partialImage/$(MODE_DIR)
 
-BuiltinDefaultCode_partialImage/$(MODE_DIR)/Objects/BuiltinDefaultCode/BuiltinDefaultCode.o : C:/WindRiver/workspace/BuiltinDefaultCode/BuiltinDefaultCode.cpp
+LearningCode_partialImage/$(MODE_DIR)/Objects/LearningCode/MyRobot.o : C:/WindRiver/workspace/Metrobots2013/LearningCode/MyRobot.cpp
 	$(TRACE_FLAG)if [ ! -d "`dirname "$@"`" ]; then mkdir -p "`dirname "$@"`"; fi;echo "building $@"; $(TOOL_PATH)ccppc $(DEBUGFLAGS_C++-Compiler) $(CC_ARCH_SPEC) -ansi -Wall  -MD -MP -mlongcall $(ADDED_C++FLAGS) $(IDE_INCLUDES) $(ADDED_INCLUDES) -DCPU=$(CPU) -DTOOL_FAMILY=$(TOOL_FAMILY) -DTOOL=$(TOOL) -D_WRS_KERNEL   $(DEFINES) -o "$@" -c "$<"
 
 
-OBJECTS_BuiltinDefaultCode_partialImage = BuiltinDefaultCode_partialImage/$(MODE_DIR)/Objects/BuiltinDefaultCode/BuiltinDefaultCode.o
+OBJECTS_LearningCode_partialImage = LearningCode_partialImage/$(MODE_DIR)/Objects/LearningCode/MyRobot.o
 
-BuiltinDefaultCode_partialImage/$(MODE_DIR)/BuiltinDefaultCode_partialImage.o : $(OBJECTS_BuiltinDefaultCode_partialImage)
-	$(TRACE_FLAG)if [ ! -d "`dirname "$@"`" ]; then mkdir -p "`dirname "$@"`"; fi;echo "building $@"; $(TOOL_PATH)ccppc -r -nostdlib -Wl,-X  -o "$@" $(OBJECTS_BuiltinDefaultCode_partialImage) $(LIBPATH) $(LIBS) $(ADDED_LIBPATH) $(ADDED_LIBS)  && if [ "$(EXPAND_DBG)" = "1" ]; then plink "$@";fi
+LearningCode_partialImage/$(MODE_DIR)/LearningCode_partialImage.o : $(OBJECTS_LearningCode_partialImage)
+	$(TRACE_FLAG)if [ ! -d "`dirname "$@"`" ]; then mkdir -p "`dirname "$@"`"; fi;echo "building $@"; $(TOOL_PATH)ccppc -r -nostdlib -Wl,-X  -o "$@" $(OBJECTS_LearningCode_partialImage) $(LIBPATH) $(LIBS) $(ADDED_LIBPATH) $(ADDED_LIBS)  && if [ "$(EXPAND_DBG)" = "1" ]; then plink "$@";fi
 
-BuiltinDefaultCode_partialImage/$(MODE_DIR)/BuiltinDefaultCode_partialImage_compile_file : $(FILE) ;
+LearningCode_partialImage/$(MODE_DIR)/LearningCode_partialImage_compile_file : $(FILE) ;
 
-_clean :: BuiltinDefaultCode_partialImage/$(MODE_DIR)/BuiltinDefaultCode_partialImage_clean
+_clean :: LearningCode_partialImage/$(MODE_DIR)/LearningCode_partialImage_clean
 
-BuiltinDefaultCode_partialImage/$(MODE_DIR)/BuiltinDefaultCode_partialImage_clean : 
-	$(TRACE_FLAG)if [ -d "BuiltinDefaultCode_partialImage" ]; then cd "BuiltinDefaultCode_partialImage"; rm -rf $(MODE_DIR); fi
+LearningCode_partialImage/$(MODE_DIR)/LearningCode_partialImage_clean : 
+	$(TRACE_FLAG)if [ -d "LearningCode_partialImage" ]; then cd "LearningCode_partialImage"; rm -rf $(MODE_DIR); fi
 
-DEP_FILES := BuiltinDefaultCode_partialImage/$(MODE_DIR)/Objects/BuiltinDefaultCode/BuiltinDefaultCode.d
+DEP_FILES := LearningCode_partialImage/$(MODE_DIR)/Objects/LearningCode/MyRobot.d
 -include $(DEP_FILES)
 
 

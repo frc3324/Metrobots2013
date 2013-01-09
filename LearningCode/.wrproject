@@ -240,12 +240,12 @@
         </mapAttribute>
     </attributes>
     <buildtargets>
-        <buildtarget buildtool="Linker" name="BuiltinDefaultCode" passed="false" targetname="BuiltinDefaultCode">
+        <buildtarget buildtool="Linker" name="Learningcode" passed="false" targetname="LearningCode">
             <contents>
-                <buildtargetreference name="/LearningCode/BuiltinDefaultCode_partialImage"/>
+                <buildtargetreference name="/LearningCode/LearningCode_partialImage"/>
             </contents>
         </buildtarget>
-        <buildtarget buildtool="Partial Image Linker" name="BuiltinDefaultCode_partialImage" passed="true" targetname="BuiltinDefaultCode_partialImage">
+        <buildtarget buildtool="Partial Image Linker" name="LearningCode_partialImage" passed="true" targetname="LearningCode_partialImage">
             <contents>
                 <folder name="/LearningCode" recursive="true"/>
             </contents>
