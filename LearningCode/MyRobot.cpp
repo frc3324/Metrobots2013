@@ -9,10 +9,11 @@ DriverStationLCD *text;
 class RobotDemo : public IterativeRobot
 {
 	
-	Jaguar fl, bl, fr, br;
+	Talon fl, bl, fr, br;
 	Joystick gamePad;
 	Gyro gyro;
 	double currcos;
+	Encoder enc;
 	
 public:
 	RobotDemo(void):
@@ -21,7 +22,8 @@ public:
 		fr( 3 ),
 		br( 4 ),
 		gamePad( 1 ),
-		gyro( 1 )
+		gyro( 1 ),
+		enc( 1, 2, false )
 	{
 	
 		text = DriverStationLCD::GetInstance();
@@ -50,6 +52,8 @@ public:
 	void TeleopInit(){
 			
 		gyro.Reset();
+		
+		enc.Start();
 			
 	}
 	
@@ -90,7 +94,8 @@ public:
 		text->Clear();
 		text->Printf(DriverStationLCD::kUser_Line1, 1, "Gyro Test");	
 		text->Printf(DriverStationLCD::kUser_Line2, 1, "%f", gyro.GetAngle() );	
-		text->Printf(DriverStationLCD::kUser_Line3, 1, "%f", currcos );	
+		text->Printf(DriverStationLCD::kUser_Line3, 1, "%f", currcos );
+		text->Printf(DriverStationLCD::kUser_Line4, 1, "%f", enc.Get());
 		text->UpdateLCD();
 		
 	}
