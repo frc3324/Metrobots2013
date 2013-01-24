@@ -1,6 +1,6 @@
 #include "drive.h"
 
-Drive::Drive( Jaguar *flMotor_, Jaguar *blMotor_, Jaguar *frMotor_, Jaguar *brMotor_, 
+Drive::Drive( Talon *flMotor_, Talon *blMotor_, Talon *frMotor_, Talon *brMotor_, 
 				Encoder *flEncoder_, Encoder *blEncoder_, Encoder *frEncoder_, Encoder *brEncoder_, 
 				Gyro *gyro_ ){
 
@@ -38,8 +38,6 @@ Drive::Drive( Jaguar *flMotor_, Jaguar *blMotor_, Jaguar *frMotor_, Jaguar *brMo
 	
 	isPIDControl = false;
 	isSlowDrive = false;
-	isReversedFront = false;
-	isSlowDrive = false;
 
 }
 
@@ -69,28 +67,15 @@ void Drive::Actuate(){
 	
 	}
 	
-	if( !isReversedFront ){
-	
-		flMotor->Set( fl * motorInverters[0] );
-		blMotor->Set( bl * motorInverters[1] );
-		frMotor->Set( fr * motorInverters[2] );
-		brMotor->Set( br * motorInverters[3] );
-	
-	}
-	else{
-	
-		flMotor->Set( br * motorInverters[0] );
-		blMotor->Set( fr * motorInverters[1] );
-		frMotor->Set( bl * motorInverters[2] );
-		brMotor->Set( fl * motorInverters[3] );
-	
-	}
+	flMotor->Set( fl * motorInverters[0] );
+	blMotor->Set( bl * motorInverters[1] );
+	frMotor->Set( fr * motorInverters[2] );
+	brMotor->Set( br * motorInverters[3] );
 
 }
 
 void Drive::Disable(){
 
-	SetReversedFront( false );
 	SetPIDControl( false );
 	SetSlowDrive( false );
 
@@ -134,9 +119,9 @@ void Drive::SetMecanumFieldOriented( double x, double y, double turn ){
 }
 
 //TODO: Make it work for angles other than 0
-void Drive::SetMecanumHoldAngle( double x, double y ){
+void Drive::SetMecanumHoldAngle( double x, double y, double angle ){
 	
-	double angle = fmod( GetGyroAngle(), 360.0 );
+	double gyroAngle = fmod( GetGyroAngle(), 360.0 );
 	
 	if( angle > 180 ){
 		
@@ -144,7 +129,7 @@ void Drive::SetMecanumHoldAngle( double x, double y ){
 		
 	}
 	
-	SetMecanumXYTurn( x, y, Drive::ANGLE_P * angle );
+	SetMecanumXYTurn( x, y, Drive::ANGLE_P * ( gyroAngle - angle ) );
 	
 }
 
@@ -204,18 +189,6 @@ void Drive::SetPIDControl( bool value ){
 
 }
 
-bool Drive::IsReversedFront(){
-
-	return isReversedFront;
-
-}
-
-void Drive::SetReversedFront( bool value ){
-
-	isReversedFront = value;
-
-}
-
 bool Drive::IsSlowDrive(){
 
 	return isSlowDrive;
@@ -258,20 +231,5 @@ void Drive::NormalizeMotorSpeeds(){
 	blSpeed = blSpeed / maxValue;
 	frSpeed = frSpeed / maxValue;
 	brSpeed = brSpeed / maxValue;
-	
-}
-
-double Drive::SquareAndPreserveSign( double input ){
-	
-	if( input > 0 ){
-		
-		return input * input;
-		
-	}
-	else{
-	
-	   return -1 * ( input * input ); 
-	
-	}
 	
 }
