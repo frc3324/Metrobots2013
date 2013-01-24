@@ -8,7 +8,7 @@
 class Drive {
 
 	public:
-		Drive( Talon *flMotor_, Talon *blMotor_, Talon *frMotor_, Talon *brMotor_, 
+		Drive( SpeedController *flMotor_, SpeedController *blMotor_, SpeedController *frMotor_, SpeedController *brMotor_, 
 				Encoder *flEncoder_, Encoder *blEncoder_, Encoder *frEncoder_, Encoder *brEncoder_, 
 				Gyro *gyro_ );
 		~Drive(){};
@@ -40,7 +40,7 @@ class Drive {
 	private:
 		void NormalizeMotorSpeeds();
 	
-		Talon *flMotor, *blMotor, *frMotor, *brMotor;
+		SpeedController *flMotor, *blMotor, *frMotor, *brMotor;
 		Encoder *flEncoder, *blEncoder, *frEncoder, *brEncoder;
 		Gyro *gyro;
 		MetroPIDController *flPID, *blPID, *frPID, *brPID;

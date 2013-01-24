@@ -1,6 +1,6 @@
 #include "drive.h"
 
-Drive::Drive( Talon *flMotor_, Talon *blMotor_, Talon *frMotor_, Talon *brMotor_, 
+Drive::Drive( SpeedController *flMotor_, SpeedController *blMotor_, SpeedController *frMotor_, SpeedController *brMotor_, 
 				Encoder *flEncoder_, Encoder *blEncoder_, Encoder *frEncoder_, Encoder *brEncoder_, 
 				Gyro *gyro_ ){
 
