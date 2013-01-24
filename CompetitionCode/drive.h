@@ -36,12 +36,12 @@ class Drive {
 		static const double ANGLE_P = 1.0/45.0; 
 		
 		static const double SLOW_DRIVE_MULTIPLIER = 0.4;
-			
+		Encoder *flEncoder, *blEncoder, *frEncoder, *brEncoder;
+
 	private:
 		void NormalizeMotorSpeeds();
 	
 		SpeedController *flMotor, *blMotor, *frMotor, *brMotor;
-		Encoder *flEncoder, *blEncoder, *frEncoder, *brEncoder;
 		Gyro *gyro;
 		MetroPIDController *flPID, *blPID, *frPID, *brPID;
 		

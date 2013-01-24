@@ -4,10 +4,8 @@
 #include "WPILib.h"
 
 #include "drive.h"
-#include "vision.h"
 
 #include "util/gamepad.h"
-#include "util/atkjoystick.h"
 
 class Metrobot : public IterativeRobot {
 

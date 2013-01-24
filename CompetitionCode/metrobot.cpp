@@ -1,5 +1,5 @@
 #include "metrobot.h"
-#include "gamepad.h"
+#include "wpilib.h"
 
 /*
  *All hardware initialization goes in constructor (anything with a port number)
@@ -123,7 +123,6 @@ void Metrobot::TeleopInit(){
 	
 	//Set states for tele-op control
 	drive->SetPIDControl( false );
-	drive->SetReversedFront( false );
 
 }
 
@@ -187,8 +186,8 @@ void Metrobot::PrintToDS(){
 	ds->Printf(DriverStationLCD::kUser_Line2, 1, "Auton: %s, Step: %d, Time: %f", autonScript == NO_SCRIPT ? "None" : ( autonScript == SCRIPT_1 ? "1" : "2" ), autonStep, autonTimer->Get() );
 	ds->Printf(DriverStationLCD::kUser_Line3, 1, "Gyro: %f", drive->GetGyroAngle() );
 	ds->Printf(DriverStationLCD::kUser_Line4, 1, "Drive PID: %s", drive->IsPIDControl() ? "Enabled" : "Disabled" );
-	ds->Printf(DriverStationLCD::kUser_Line5, 1, "" );
-	ds->Printf(DriverStationLCD::kUser_Line6, 1, "" );
+	ds->Printf(DriverStationLCD::kUser_Line5, 1, "fl: %f, bl: %f", drive->flEncoder->Get(), drive->blEncoder->Get() );
+	ds->Printf(DriverStationLCD::kUser_Line6, 1, "fr: %f, br: %f", drive->frEncoder->Get(), drive->brEncoder->Get() );
 	ds->UpdateLCD();
 
 }

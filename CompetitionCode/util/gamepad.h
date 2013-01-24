@@ -1,13 +1,18 @@
 #ifndef GAME_PAD_H
 #define GAME_PAD_H
 
-#include "controller.h"
+#include "WPILib.h"
+#define MAX_NUM_BUTTONS 12
 
-class GamePad : public Controller{
+class GamePad {
 
 	public:
 		GamePad( int port );
 		double GetAxis( int axis );
+		void Update();
+		bool GetButton( int button );
+		bool GetButtonDown( int button );
+		bool GetButtonUp( int button );
 
 		static const int A = 1;
 		static const int B = 2;
@@ -27,6 +32,14 @@ class GamePad : public Controller{
 		static const int RIGHT_Y = 5;
 		static const int DPAD_X = 6;
 		static const int DPAD_Y = 7;
+		
+	private:
+		Joystick *joystick_;
+				
+		bool oldBtnStates[ MAX_NUM_BUTTONS ];
+		bool newBtnStates[ MAX_NUM_BUTTONS ];
+		bool upEventStates[ MAX_NUM_BUTTONS ];
+		bool downEventStates[ MAX_NUM_BUTTONS ];
 
 };
 
