@@ -1,4 +1,5 @@
 #include "metrobot.h"
+#include "gamepad.h"
 
 /*
  *All hardware initialization goes in constructor (anything with a port number)
@@ -20,7 +21,7 @@ Metrobot::Metrobot(){
 	
 	gyro = new Gyro( 1 );
 
-	gamePad = new Controller( 1 );
+	gamePad = new GamePad( 1 );
 
 }
 

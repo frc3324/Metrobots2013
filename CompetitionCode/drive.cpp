@@ -1,6 +1,6 @@
 #include "drive.h"
 
-Drive::Drive( Jaguar *flMotor_, Jaguar *blMotor_, Jaguar *frMotor_, Jaguar *brMotor_, 
+Drive::Drive( SpeedController *flMotor_, SpeedController *blMotor_, SpeedController *frMotor_, SpeedController *brMotor_, 
 				Encoder *flEncoder_, Encoder *blEncoder_, Encoder *frEncoder_, Encoder *brEncoder_, 
 				Gyro *gyro_ ){
 

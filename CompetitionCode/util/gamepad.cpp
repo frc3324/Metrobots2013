@@ -1,4 +1,9 @@
 #include "GamePad.h"
+#include "WPILib.h"
+
+GamePad::GamePad(int port) :
+	Controller::Controller(port) {
+}
 
 double GamePad::GetAxis( int axis ){
 

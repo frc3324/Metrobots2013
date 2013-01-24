@@ -37,7 +37,7 @@ class Metrobot : public IterativeRobot {
 		void PrintToDS();
 		
 	private:
-		Jaguar *flMotor, *blMotor, *frMotor, *brMotor;
+		Talon *flMotor, *blMotor, *frMotor, *brMotor;
 		Encoder *flEncoder, *blEncoder, *frEncoder, *brEncoder; 
 		Gyro *gyro;
 		GamePad *gamePad;

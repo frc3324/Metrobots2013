@@ -1,4 +1,5 @@
 #include "Controller.h"
+#include <wpilib.h>
 
 Controller::Controller( int port ){
 

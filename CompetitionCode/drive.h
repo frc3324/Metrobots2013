@@ -8,7 +8,7 @@
 class Drive {
 
 	public:
-		Drive( Jaguar *flMotor_, Jaguar *blMotor_, Jaguar *frMotor_, Jaguar *brMotor_, 
+		Drive( SpeedController *flMotor_, SpeedController *blMotor_, SpeedController *frMotor_, SpeedController *brMotor_, 
 				Encoder *flEncoder_, Encoder *blEncoder_, Encoder *frEncoder_, Encoder *brEncoder_, 
 				Gyro *gyro_ );
 		~Drive(){};

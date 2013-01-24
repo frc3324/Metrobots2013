@@ -6,7 +6,7 @@
 class GamePad : public Controller{
 
 	public:
-		GamePad( int port ) : Controller::Controller( port ){};
+		GamePad( int port );
 		double GetAxis( int axis );
 
 		static const int A = 1;
