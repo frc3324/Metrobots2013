@@ -49,7 +49,7 @@ public:
 	
 	void TeleopInit(){
 			
-		gyro.Reset();
+		//gyro.Reset();
 			
 	}
 	
@@ -75,11 +75,11 @@ public:
 			
 		}
 		
-		else if( gamePad.GetRawButton( 4 ) ){
+		/*else if( gamePad.GetRawButton( 4 ) ){
 			
 			MecanumDriveStraight( gamePad.GetRawAxis( 1 ), -gamePad.GetRawAxis( 2 ), (double)gyro.GetAngle()- gamePad.GetDirectionDegrees() );
 			
-		}
+		}*/
 		
 		else{
 			
@@ -88,9 +88,9 @@ public:
 		}
 		
 		text->Clear();
-		text->Printf(DriverStationLCD::kUser_Line1, 1, "Gyro Test");	
+		text->Printf(DriverStationLCD::kUser_Line1, 1, "2013 Competition Chassis with Gyro");	
 		text->Printf(DriverStationLCD::kUser_Line2, 1, "%f", gyro.GetAngle() );	
-		text->Printf(DriverStationLCD::kUser_Line3, 1, "%f", currcos );	
+		//text->Printf(DriverStationLCD::kUser_Line3, 1, "%f", currcos );	
 		text->UpdateLCD();
 		
 	}
