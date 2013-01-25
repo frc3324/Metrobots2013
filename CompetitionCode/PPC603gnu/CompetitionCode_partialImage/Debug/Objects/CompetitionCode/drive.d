@@ -1,6 +1,6 @@
 CompetitionCode_partialImage/Debug/Objects/CompetitionCode/drive.o:  \
- C:/WindRiver/workspace/Metrobots2013/CompetitionCode/drive.cpp \
-  C:/WindRiver/workspace/Metrobots2013/CompetitionCode/drive.h \
+ X:/Metrobots2013/CompetitionCode/drive.cpp \
+  X:/Metrobots2013/CompetitionCode/drive.h \
   C:/WindRiver/vxworks-6.3/target/h/WPILib/WPILib.h \
   C:/WindRiver/vxworks-6.3/target/h/string.h \
   C:/WindRiver/vxworks-6.3/target/h/types/vxANSI.h \
@@ -379,10 +379,10 @@ CompetitionCode_partialImage/Debug/Objects/CompetitionCode/drive.o:  \
   C:/WindRiver/vxworks-6.3/target/h/WPILib/Vision/ColorImage.h \
   C:/WindRiver/vxworks-6.3/target/h/WPILib/WPIErrors.h \
   C:/WindRiver/vxworks-6.3/target/h/Math.h \
-  C:/WindRiver/workspace/Metrobots2013/CompetitionCode/util/metropidcontroller.h \
+  X:/Metrobots2013/CompetitionCode/util/metropidcontroller.h \
   C:/WindRiver/vxworks-6.3/target/h/WPILib/WPILib.h
 
-C:/WindRiver/workspace/Metrobots2013/CompetitionCode/drive.h:
+X:/Metrobots2013/CompetitionCode/drive.h:
 
 C:/WindRiver/vxworks-6.3/target/h/WPILib/WPILib.h:
 
@@ -1140,6 +1140,6 @@ C:/WindRiver/vxworks-6.3/target/h/WPILib/WPIErrors.h:
 
 C:/WindRiver/vxworks-6.3/target/h/Math.h:
 
-C:/WindRiver/workspace/Metrobots2013/CompetitionCode/util/metropidcontroller.h:
+X:/Metrobots2013/CompetitionCode/util/metropidcontroller.h:
 
 C:/WindRiver/vxworks-6.3/target/h/WPILib/WPILib.h:

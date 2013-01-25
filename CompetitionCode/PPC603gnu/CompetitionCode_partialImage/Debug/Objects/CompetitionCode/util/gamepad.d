@@ -1,7 +1,7 @@
  \
  CompetitionCode_partialImage/Debug/Objects/CompetitionCode/util/gamepad.o:  \
- C:/WindRiver/workspace/Metrobots2013/CompetitionCode/util/gamepad.cpp \
-  C:/WindRiver/workspace/Metrobots2013/CompetitionCode/util/GamePad.h \
+ X:/Metrobots2013/CompetitionCode/util/gamepad.cpp \
+  X:/Metrobots2013/CompetitionCode/util/GamePad.h \
   C:/WindRiver/vxworks-6.3/target/h/WPILib/WPILib.h \
   C:/WindRiver/vxworks-6.3/target/h/string.h \
   C:/WindRiver/vxworks-6.3/target/h/types/vxANSI.h \
@@ -381,7 +381,7 @@
   C:/WindRiver/vxworks-6.3/target/h/WPILib/WPIErrors.h \
   C:/WindRiver/vxworks-6.3/target/h/WPILib/WPILib.h
 
-C:/WindRiver/workspace/Metrobots2013/CompetitionCode/util/GamePad.h:
+X:/Metrobots2013/CompetitionCode/util/GamePad.h:
 
 C:/WindRiver/vxworks-6.3/target/h/WPILib/WPILib.h:
 

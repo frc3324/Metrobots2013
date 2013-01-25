@@ -31,8 +31,8 @@ else
 MODE_DIR := NonDebug
 endif
 OBJ_DIR := .
-WS_ROOT_DIR := C:/WindRiver/workspace
-PRJ_ROOT_DIR := $(WS_ROOT_DIR)/Metrobots2013/CompetitionCode
+WS_ROOT_DIR := X:/Metrobots2013
+PRJ_ROOT_DIR := $(WS_ROOT_DIR)/CompetitionCode
 
 
 
@@ -238,3 +238,4 @@ clean :: external_clean $(CLEAN_STEP) _clean
 # entry point for extending the build clean
 external_clean ::
 	@echo ""
+

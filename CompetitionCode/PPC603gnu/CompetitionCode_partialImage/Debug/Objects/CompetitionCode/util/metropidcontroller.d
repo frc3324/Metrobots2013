@@ -1,7 +1,7 @@
  \
  CompetitionCode_partialImage/Debug/Objects/CompetitionCode/util/metropidcontroller.o:  \
- C:/WindRiver/workspace/Metrobots2013/CompetitionCode/util/metropidcontroller.cpp \
-  C:/WindRiver/workspace/Metrobots2013/CompetitionCode/util/metropidcontroller.h \
+ X:/Metrobots2013/CompetitionCode/util/metropidcontroller.cpp \
+  X:/Metrobots2013/CompetitionCode/util/metropidcontroller.h \
   C:/WindRiver/vxworks-6.3/target/h/WPILib/WPILib.h \
   C:/WindRiver/vxworks-6.3/target/h/string.h \
   C:/WindRiver/vxworks-6.3/target/h/types/vxANSI.h \
@@ -380,7 +380,7 @@
   C:/WindRiver/vxworks-6.3/target/h/WPILib/Vision/ColorImage.h \
   C:/WindRiver/vxworks-6.3/target/h/WPILib/WPIErrors.h
 
-C:/WindRiver/workspace/Metrobots2013/CompetitionCode/util/metropidcontroller.h:
+X:/Metrobots2013/CompetitionCode/util/metropidcontroller.h:
 
 C:/WindRiver/vxworks-6.3/target/h/WPILib/WPILib.h:
 

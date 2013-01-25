@@ -1,6 +1,6 @@
 CompetitionCode_partialImage/Debug/Objects/CompetitionCode/vision.o:  \
- C:/WindRiver/workspace/Metrobots2013/CompetitionCode/vision.cpp \
-  C:/WindRiver/workspace/Metrobots2013/CompetitionCode/vision.h \
+ X:/Metrobots2013/CompetitionCode/vision.cpp \
+  X:/Metrobots2013/CompetitionCode/vision.h \
   C:/WindRiver/vxworks-6.3/target/h/WPILib/WPILib.h \
   C:/WindRiver/vxworks-6.3/target/h/string.h \
   C:/WindRiver/vxworks-6.3/target/h/types/vxANSI.h \
@@ -383,7 +383,7 @@ CompetitionCode_partialImage/Debug/Objects/CompetitionCode/vision.o:  \
   C:/WindRiver/vxworks-6.3/target/h/WPILib/Vision/RGBImage.h \
   C:/WindRiver/vxworks-6.3/target/h/WPILib/Vision/AxisCamera.h
 
-C:/WindRiver/workspace/Metrobots2013/CompetitionCode/vision.h:
+X:/Metrobots2013/CompetitionCode/vision.h:
 
 C:/WindRiver/vxworks-6.3/target/h/WPILib/WPILib.h:
 
