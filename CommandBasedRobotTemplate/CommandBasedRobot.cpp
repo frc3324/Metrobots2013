@@ -99,10 +99,8 @@ private:
 					drive->ResetGyro();
 					
 		}
-		
-		//flMotor->Set( gyro->GetAngle() / 100.0 );
-		
-		//fprintf(stderr, "test output\n");
+				
+		fprintf(stderr, "fl: %f", flEncoder->Get());
 				
 		
 		Actuate();

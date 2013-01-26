@@ -55,7 +55,7 @@ void Drive::Actuate(){
 	double y = driverY;
 	double turn = driverTurn;
 
-	//if( isFieldOriented ){
+	if( isFieldOriented ){
 	
 		double gAngle = GetGyroAngle();
 		double cosA = cos( gAngle * 3.14159 / 180 );
@@ -64,7 +64,7 @@ void Drive::Actuate(){
     	x = driverX*cosA - driverY*sinA;
     	y = driverX*sinA + driverY*cosA;
 	
-	//}
+	}
 	
 	if( isHoldAngle ){
 	
