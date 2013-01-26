@@ -32,7 +32,7 @@ class Drive {
 		
 		static const double PID_P = 1.0;
 		static const double PID_I = 0.0;
-		static const double PID_D = 1.0;
+		static const double PID_D = 0.1;
 		static const double VEL_PID_MULTIPLIER = 1600;
 		
 		static const double ANGLE_P = -1.0/45.0; 
@@ -40,7 +40,7 @@ class Drive {
 		static const double SLOW_DRIVE_MULTIPLIER = 0.4;
 		Encoder *flEncoder, *blEncoder, *frEncoder, *brEncoder;
 
-	private:
+	//private:
 		void NormalizeMotorSpeeds();
 	
 		SpeedController *flMotor, *blMotor, *frMotor, *brMotor;

@@ -51,7 +51,8 @@ void MetroPIDController::Run(){
         }
 
         result = ( error * p ) + ( totalError * i ) + ( (error-prevError) * d ) + ( isIntegratedOutput ? result : 0.0 );
-            
+        result = Limit( result );    
+        
     	output = result;
             
         if ( mode == FEED_FORWARD_PID || mode == TAKE_BACK_HALF_PID ) {
@@ -120,7 +121,20 @@ void MetroPIDController::Disable(){
 	Synchronized s(semaphore);
 	output = 0.0;
 	isEnabled = false;
+	Reset();
 
+}
+
+double MetroPIDController::Limit( double input ){
+	
+	if( input > 1.0 ){
+		return 1.0;
+	}
+	if( input < -1.0 ){
+		return -1.0;
+	}
+	return input;
+	
 }
 
 void MetroPIDController::Reset(){

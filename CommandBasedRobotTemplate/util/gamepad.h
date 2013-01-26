@@ -9,7 +9,6 @@ class GamePad {
 	public:
 		GamePad( int port );
 		double GetAxis( int axis );
-		double AxisDeadband( double input );
 		void Update();
 		bool GetButton( int button );
 		bool GetButtonDown( int button );

@@ -19,28 +19,26 @@ GamePad::GamePad(int port){
 
 double GamePad::GetAxis( int axis ){
 
+	double output;
+	
 	if( axis == GamePad::LEFT_X || axis == GamePad::RIGHT_X ){
 
-	    return /*AxisDeadband( */joystick_->GetRawAxis( axis ) /*)*/;
+	    output = joystick_->GetRawAxis( axis );
 
     }
     else{
 
-        return /*AxisDeadband(*/ -joystick_->GetRawAxis( axis ) /*)*/;
+        output = -joystick_->GetRawAxis( axis );
 
     }
-
-}
-/*double AxisDeadband( double input ){
 	
-	double output = input;
+	if( ( output > 0.0 && output < 0.05 ) || ( output < 0.0 && output > -0.05 ) ){
+		output = 0.0;
+	}
 
-	output = ( output > 0 && output < GamePad::AXIS_DEADBAND ) ? 0.0 : output;
-	output = ( output < 0 && output > -GamePad::AXIS_DEADBAND ) ? 0.0 : output;
-	
 	return output;
-	
-}*/
+		
+}
 
 void GamePad::Update(){
 

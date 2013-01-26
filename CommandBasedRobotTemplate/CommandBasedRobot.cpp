@@ -22,11 +22,12 @@ private:
 	
 	Drive *drive;
 	
-	//DriverStationLCD *ds;
+	DriverStationLCD *ds;
 	
 	CommandBasedRobot::AutonScripts autonScript;
 	Timer *autonTimer;
 	int autonStep;
+	int driveControls;
 	
 	virtual void RobotInit() {
 		
@@ -35,8 +36,8 @@ private:
 		frMotor = new Talon( 3 );
 		brMotor = new Talon( 4 );
 		
-		flEncoder = new Encoder( 1, 2 );
-		blEncoder = new Encoder( 3, 4 );
+		flEncoder = new Encoder( 9, 10 );
+		blEncoder = new Encoder( 11, 12 );
 		frEncoder = new Encoder( 5, 6 );
 		brEncoder = new Encoder( 7, 8 );
 		
@@ -49,10 +50,14 @@ private:
 							flEncoder, blEncoder, frEncoder, brEncoder, gyro );
 		drive->SetInvertedMotors( false, false, true, true );
 		
-		//ds = DriverStationLCD::GetInstance();
+		ds = DriverStationLCD::GetInstance();
 		
 		autonScript = NO_SCRIPT;
 		autonStep = 0;
+		
+		driveControls = 0;
+		// 0 for XYTurn
+		// 1 for RL Strafe
 		
 	}
 	
@@ -77,9 +82,31 @@ private:
 	virtual void TeleopPeriodic() {
 
 		UpdateOI();
-		
-		drive->SetMecanumXYTurn( gamePad->GetAxis( GamePad::LEFT_X ), gamePad->GetAxis( GamePad::LEFT_Y ), gamePad->GetAxis( GamePad::RIGHT_X ) );
 
+		if( gamePad->GetButtonDown( GamePad::X ) ){
+			driveControls = 0; //XYTurn
+		}
+		if( gamePad->GetButtonDown( GamePad::Y ) ){
+			driveControls = 1; //RLStrafe
+		}
+		
+		if( gamePad->GetButtonDown( GamePad::START ) ){
+			drive->SetFieldOriented( true );
+		}
+		if( gamePad->GetButtonDown( GamePad::BACK ) ){
+			drive->SetFieldOriented( false );
+		}
+						
+		drive->SetSlowDrive( gamePad->GetButton( GamePad::LB ) || gamePad->GetButton( GamePad::RB ) );
+		
+		if( driveControls == 0 ){
+			drive->SetMecanumXYTurn( gamePad->GetAxis( GamePad::LEFT_X ), gamePad->GetAxis( GamePad::LEFT_Y ), gamePad->GetAxis( GamePad::RIGHT_X ) );
+		}
+		if( driveControls == 1 ){
+			drive->SetMecanumRLStrafe( gamePad->GetAxis( GamePad::RIGHT_Y ), gamePad->GetAxis( GamePad::LEFT_Y ), gamePad->GetAxis( GamePad::TRIGGER ) );
+		}
+				
+			
 		if( gamePad->GetButtonDown( GamePad::RIGHT_JS ) ){
 					
 			drive->SetHoldAngle( true );
@@ -105,14 +132,14 @@ private:
 		
 		Actuate();
 		
-		/*ds->Clear();
-		ds->Printf(DriverStationLCD::kUser_Line1, 1, "Team 3324, v1.0");
-		ds->Printf(DriverStationLCD::kUser_Line2, 1, "Auton: %s, Step: %d, Time: %f", autonScript == NO_SCRIPT ? "None" : ( autonScript == SCRIPT_1 ? "1" : "2" ), autonStep, autonTimer->Get() );
+		ds->Clear();
+		ds->Printf(DriverStationLCD::kUser_Line1, 1, "Team 3324, v3.0");
+		//ds->Printf(DriverStationLCD::kUser_Line2, 1, "Auton: %s, Step: %d, Time: %f", autonScript == NO_SCRIPT ? "None" : ( autonScript == SCRIPT_1 ? "1" : "2" ), autonStep, autonTimer->Get() );
 		ds->Printf(DriverStationLCD::kUser_Line3, 1, "Gyro: %f", drive->GetGyroAngle() );
 		ds->Printf(DriverStationLCD::kUser_Line4, 1, "Drive PID: %s", drive->IsPIDControl() ? "Enabled" : "Disabled" );
-		ds->Printf(DriverStationLCD::kUser_Line5, 1, "fl: %f, bl: %f", drive->flEncoder->Get(), drive->blEncoder->Get() );
-		ds->Printf(DriverStationLCD::kUser_Line6, 1, "fr: %f, br: %f", drive->frEncoder->Get(), drive->brEncoder->Get() );
-		ds->UpdateLCD();*/
+		ds->Printf(DriverStationLCD::kUser_Line5, 1, "fr: %i, br: %i", drive->frEncoder->Get(), drive->brEncoder->Get() );
+		ds->Printf(DriverStationLCD::kUser_Line6, 1, "fl: %i, bl: %i", drive->flEncoder->Get(), drive->blEncoder->Get() );
+		ds->UpdateLCD();
 		
 	}
 	

@@ -27,6 +27,7 @@ class MetroPIDController {
 		void Init( double p_, double i_, double d_, Modes mode_, bool isIntegratedOutput_, double period_ );
 		void Run();
 		static void CallRun( void *controller );
+		double Limit( double input );
 		
 		MetroPIDController::Modes mode;
 		bool isIntegratedOutput;
