@@ -33,6 +33,11 @@ class Drive {
 		static const double PID_P = 1.0;
 		static const double PID_I = 0.0;
 		static const double PID_D = 0.1;
+		
+		static const double XYTURN_PID_P = 1.0;
+		static const double XYTURN_PID_I = 0.0;
+		static const double XYTURN_PID_D = 0.1;
+		
 		static const double VEL_PID_MULTIPLIER = 1600;
 		
 		static const double ANGLE_P = -1.0/45.0; 
@@ -45,7 +50,7 @@ class Drive {
 	
 		SpeedController *flMotor, *blMotor, *frMotor, *brMotor;
 		Gyro *gyro;
-		MetroPIDController *flPID, *blPID, *frPID, *brPID;
+		MetroPIDController *flPID, *blPID, *frPID, *brPID, *xPID, *yPID, *turnPID;
 		
 		double driverX, driverY, driverTurn, targetAngle;
 		int motorInverters[4];

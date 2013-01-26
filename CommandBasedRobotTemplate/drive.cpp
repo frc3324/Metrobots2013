@@ -22,15 +22,19 @@ Drive::Drive( SpeedController *flMotor_, SpeedController *blMotor_, SpeedControl
 	
 	gyro = gyro_;
 	
-	flPID = new MetroPIDController( Drive::PID_P, Drive::PID_I, Drive::PID_D, MetroPIDController::PID, true );
-	blPID = new MetroPIDController( Drive::PID_P, Drive::PID_I, Drive::PID_D, MetroPIDController::PID, true );
-	frPID = new MetroPIDController( Drive::PID_P, Drive::PID_I, Drive::PID_D, MetroPIDController::PID, true );
-	brPID = new MetroPIDController( Drive::PID_P, Drive::PID_I, Drive::PID_D, MetroPIDController::PID, true );
+	//flPID = new MetroPIDController( Drive::PID_P, Drive::PID_I, Drive::PID_D, MetroPIDController::PID, true );
+	//blPID = new MetroPIDController( Drive::PID_P, Drive::PID_I, Drive::PID_D, MetroPIDController::PID, true );
+	//frPID = new MetroPIDController( Drive::PID_P, Drive::PID_I, Drive::PID_D, MetroPIDController::PID, true );
+	//brPID = new MetroPIDController( Drive::PID_P, Drive::PID_I, Drive::PID_D, MetroPIDController::PID, true );
+
+	xPID = new MetroPIDController( Drive::XYTURN_PID_P, Drive::XYTURN_PID_I, Drive::XYTURN_PID_D, MetroPIDController::PID, true );
+	yPID = new MetroPIDController( Drive::XYTURN_PID_P, Drive::XYTURN_PID_I, Drive::XYTURN_PID_D, MetroPIDController::PID, true );
+	turnPID = new MetroPIDController( Drive::XYTURN_PID_P, Drive::XYTURN_PID_I, Drive::XYTURN_PID_D, MetroPIDController::PID, true );
 	
-	flPID->Disable();
-	blPID->Disable();
-	frPID->Disable();
-	brPID->Disable();
+	//flPID->Disable();
+	//blPID->Disable();
+	//frPID->Disable();
+	//brPID->Disable();
 	
 	motorInverters[0] = 1;
 	motorInverters[1] = 1;
@@ -46,11 +50,20 @@ Drive::Drive( SpeedController *flMotor_, SpeedController *blMotor_, SpeedControl
 
 void Drive::Actuate(){
 
-	flPID->SetSource( ( 1 / flEncoder->GetPeriod() ) / Drive::VEL_PID_MULTIPLIER );
-	blPID->SetSource( ( 1 / blEncoder->GetPeriod() ) / Drive::VEL_PID_MULTIPLIER );
-	frPID->SetSource( -( 1 / frEncoder->GetPeriod() ) / Drive::VEL_PID_MULTIPLIER );
-	brPID->SetSource( -( 1 / brEncoder->GetPeriod() ) / Drive::VEL_PID_MULTIPLIER );
+	//flPID->SetSource( ( 1 / flEncoder->GetPeriod() ) / Drive::VEL_PID_MULTIPLIER );
+	//blPID->SetSource( ( 1 / blEncoder->GetPeriod() ) / Drive::VEL_PID_MULTIPLIER );
+	//frPID->SetSource( -( 1 / frEncoder->GetPeriod() ) / Drive::VEL_PID_MULTIPLIER );
+	//brPID->SetSource( -( 1 / brEncoder->GetPeriod() ) / Drive::VEL_PID_MULTIPLIER );
 
+	double flVel = 1 / flEncoder->GetPeriod() / Drive::VEL_PID_MULTIPLIER;
+	double blVel = 1 / flEncoder->GetPeriod() / Drive::VEL_PID_MULTIPLIER;
+	double frVel = -1 / flEncoder->GetPeriod() / Drive::VEL_PID_MULTIPLIER;
+	double brVel = -1 / flEncoder->GetPeriod() / Drive::VEL_PID_MULTIPLIER;
+
+	xPID->SetSource( flVel + brVel - blVel - frVel );
+	yPID->SetSource( flVel + brVel + blVel + frVel );
+	turnPID->SetSource( flVel - brVel + blVel - frVel );
+	
 	double x = driverX;
 	double y = driverY;
 	double turn = driverTurn;
@@ -88,15 +101,24 @@ void Drive::Actuate(){
 
 	if( isPIDControl ){
 	
-		flPID->SetSetpoint( fl );
-		blPID->SetSetpoint( bl );
-		frPID->SetSetpoint( fr );
-		brPID->SetSetpoint( br );
+		//flPID->SetSetpoint( fl );
+		//blPID->SetSetpoint( bl );
+		//frPID->SetSetpoint( fr );
+		//brPID->SetSetpoint( br );
+
+		xPID->SetSetpoint( x );
+		yPID->SetSetpoint( y );
+		turnPID->SetSetpoint( turn );
 	
-		fl = flPID->GetOutput();
-		bl = blPID->GetOutput();
-		fr = frPID->GetOutput();
-		br = brPID->GetOutput();
+		//fl = flPID->GetOutput();
+		//bl = blPID->GetOutput();
+		//fr = frPID->GetOutput();
+		//br = brPID->GetOutput();
+
+		fl = xPID->GetOutput() + yPID->GetOutput() + turnPID->GetOutput() ;
+		bl = -xPID->GetOutput() + yPID->GetOutput() + turnPID->GetOutput() ;
+		fr = -xPID->GetOutput() + yPID->GetOutput() - turnPID->GetOutput() ;
+		br = xPID->GetOutput() + yPID->GetOutput() - turnPID->GetOutput() ;
 	
 	}
 	
@@ -198,19 +220,27 @@ void Drive::SetPIDControl( bool value ){
 	
 	if( isPIDControl ){
 	
-		flPID->Enable();
-		blPID->Enable();
-		frPID->Enable();
-		brPID->Enable();
+		//flPID->Enable();
+		//blPID->Enable();
+		//frPID->Enable();
+		//brPID->Enable();
+
+		xPID->Enable();
+		yPID->Enable();
+		turnPID->Enable();
 	
 	}
 	else{
 	
-		flPID->Disable();
-		blPID->Disable();
-		frPID->Disable();
-		brPID->Disable();
+		//flPID->Disable();
+		//blPID->Disable();
+		//frPID->Disable();
+		//brPID->Disable();
 	
+		xPID->Disable();
+		yPID->Disable();
+		turnPID->Disable();
+		
 	}
 
 }
