@@ -1,5 +1,27 @@
-#include "metrobot.h"
 #include "wpilib.h"
+
+class Metrobot : public IterativeRobot {
+private:
+	
+	virtual void RobotInit() {
+	}
+	
+	virtual void AutonomousInit() {
+	}
+	
+	virtual void AutonomousPeriodic() {
+	}
+	
+	virtual void TeleopInit() {
+	}
+	
+	virtual void TeleopPeriodic() {
+	}
+	
+	virtual void TestPeriodic() {
+	}
+	
+};
 
 /*
  *All hardware initialization goes in constructor (anything with a port number)
@@ -7,7 +29,7 @@
  *
  *Wiring ports can be changed here and will be affected throughout the program
  */
-Metrobot::Metrobot(){
+/*Metrobot::Metrobot(){
 
 	flMotor = new Talon( 1 );
 	blMotor = new Talon( 2 );
@@ -37,7 +59,7 @@ void Metrobot::RobotInit(){
 	autonStep = 0;
 	
 	GetWatchdog().SetExpiration( 0.1 );
-	GetWatchdog().SetEnabled( true );
+	GetWatchdog().SetEnabled( false );
 	
 }
 
@@ -190,6 +212,6 @@ void Metrobot::PrintToDS(){
 	ds->Printf(DriverStationLCD::kUser_Line6, 1, "fr: %f, br: %f", drive->frEncoder->Get(), drive->brEncoder->Get() );
 	ds->UpdateLCD();
 
-}
+}*/
 
 START_ROBOT_CLASS( Metrobot );
