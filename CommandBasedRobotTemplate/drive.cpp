@@ -101,10 +101,10 @@ void Drive::Actuate(){
 
 	if( isPIDControl ){
 	
-		//flPID->SetSetpoint( fl, fl / Drive::VEL_PID_MULTIPLIER );
-		//blPID->SetSetpoint( bl, bl / Drive::VEL_PID_MULTIPLIER );
-		//frPID->SetSetpoint( fr, fr / Drive::VEL_PID_MULTIPLIER );
-		//brPID->SetSetpoint( br, br / Drive::VEL_PID_MULTIPLIER );
+		//flPID->SetSetpoint( fl, fl );
+		//blPID->SetSetpoint( bl, bl );
+		//frPID->SetSetpoint( fr, fr );
+		//brPID->SetSetpoint( br, br );
 
 		xPID->SetSetpoint( x );
 		yPID->SetSetpoint( y );
