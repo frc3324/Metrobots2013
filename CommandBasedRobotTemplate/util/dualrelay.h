@@ -5,7 +5,7 @@
 
 class DualRelay {
 	public:
-		DualRelay( UINT8 forwardPort, UINT8 reversePort );
+		DualRelay( int forwardPort, int reversePort );
 		~DualRelay(){};
 		
 		void Set( Relay::Value value );

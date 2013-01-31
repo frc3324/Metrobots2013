@@ -1,10 +1,11 @@
 #include "dualrelay.h"
 #include "WPILib.h"
 
-DualRelay::DualRelay( UINT8 forwardPort, UINT8 reversePort )
-{
+DualRelay::DualRelay( int forwardPort, int reversePort ){
+	
 	forward = new Relay( forwardPort, Relay::kForwardOnly );
 	reverse = new Relay( reversePort, Relay::kReverseOnly );
+
 }
 
 void DualRelay::Set( Relay::Value value )

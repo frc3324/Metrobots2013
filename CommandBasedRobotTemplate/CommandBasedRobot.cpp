@@ -2,7 +2,9 @@
 
 #include "util/gamepad.h"
 #include "util/metropidcontroller.h"
+#include "util/dualrelay.h"
 #include "drive.h"
+#include "shooter.h"
 #include <stdio.h>
 #include <Math.h>
 
@@ -16,11 +18,14 @@ private:
 	};
 	
 	Talon *flMotor, *blMotor, *frMotor, *brMotor;
+	Victor *shooterMotor;
+	DualRelay *loaderRelay;
 	Encoder *flEncoder, *blEncoder, *frEncoder, *brEncoder; 
 	Gyro *gyro;
 	GamePad *gamePad;
 	
 	Drive *drive;
+	Shooter *shooter;
 	
 	DriverStationLCD *ds;
 	
@@ -36,6 +41,9 @@ private:
 		frMotor = new Talon( 3 );
 		brMotor = new Talon( 4 );
 		
+		shooterMotor = new Victor( 5 );
+		loaderRelay = new DualRelay( 1, 2 );
+		
 		flEncoder = new Encoder( 9, 10 );
 		blEncoder = new Encoder( 11, 12 );
 		frEncoder = new Encoder( 5, 6 );
@@ -49,6 +57,8 @@ private:
 		drive = new Drive( flMotor, blMotor, frMotor, brMotor, 
 							flEncoder, blEncoder, frEncoder, brEncoder, gyro );
 		drive->SetInvertedMotors( false, false, true, true );
+		
+		shooter = new Shooter( shooterMotor, loaderRelay );
 		
 		ds = DriverStationLCD::GetInstance();
 		
@@ -152,6 +162,14 @@ private:
 	void Actuate(){
 		
 		drive->Actuate();
+		shooter->Actuate();
+		
+	}
+	
+	void Disable(){
+		
+		drive->Disable();
+		shooter->Disable();
 		
 	}
 	
