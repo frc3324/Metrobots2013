@@ -73,18 +73,20 @@ private:
 	
 	virtual void AutonomousInit() {
 	
-		
+		Disable();
 		
 	}
 	
 	virtual void AutonomousPeriodic() {
 		
 		PrintToDS();
+		Actuate();
 		
 	}
 	
 	virtual void TeleopInit() {
 		
+		Disable();
 		drive->SetFieldOriented( true );
 		
 	}
@@ -144,19 +146,13 @@ private:
 	
 	virtual void DisabledInit() {
 		
-		
+		Disable();
 		
 	}
 	
 	virtual void DisabledPeriodic() {
 		
 		PrintToDS();
-		
-	}
-	
-	virtual void TestPeriodic() {
-		
-		
 		
 	}
 	
