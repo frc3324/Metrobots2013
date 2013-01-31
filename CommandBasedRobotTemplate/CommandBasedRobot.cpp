@@ -79,7 +79,7 @@ private:
 	
 	virtual void AutonomousPeriodic() {
 		
-		
+		PrintToDS();
 		
 	}
 	
@@ -135,21 +135,22 @@ private:
 					
 					drive->ResetGyro();
 					
-		}
-				
-		fprintf(stderr, "fl: %f", flEncoder->Get());
-				
+		}				
 		
 		Actuate();
+		PrintToDS();
 		
-		ds->Clear();
-		ds->Printf(DriverStationLCD::kUser_Line1, 1, "Team 3324, v3.0");
-		//ds->Printf(DriverStationLCD::kUser_Line2, 1, "Auton: %s, Step: %d, Time: %f", autonScript == NO_SCRIPT ? "None" : ( autonScript == SCRIPT_1 ? "1" : "2" ), autonStep, autonTimer->Get() );
-		ds->Printf(DriverStationLCD::kUser_Line3, 1, "Gyro: %f", drive->GetGyroAngle() );
-		ds->Printf(DriverStationLCD::kUser_Line4, 1, "Drive PID: %s", drive->IsPIDControl() ? "Enabled" : "Disabled" );
-		ds->Printf(DriverStationLCD::kUser_Line5, 1, "fr: %i, br: %i", drive->frEncoder->Get(), drive->brEncoder->Get() );
-		ds->Printf(DriverStationLCD::kUser_Line6, 1, "fl: %i, bl: %i", drive->flEncoder->Get(), drive->blEncoder->Get() );
-		ds->UpdateLCD();
+	}
+	
+	virtual void DisabledInit() {
+		
+		
+		
+	}
+	
+	virtual void DisabledPeriodic() {
+		
+		PrintToDS();
 		
 	}
 	
@@ -176,6 +177,19 @@ private:
 	void UpdateOI(){
 		
 		gamePad->Update();
+		
+	}
+	
+	void PrintToDS(){
+		
+		ds->Clear();
+		ds->Printf(DriverStationLCD::kUser_Line1, 1, "Team 3324, v3.0");
+		//ds->Printf(DriverStationLCD::kUser_Line2, 1, "Auton: %s, Step: %d, Time: %f", autonScript == NO_SCRIPT ? "None" : ( autonScript == SCRIPT_1 ? "1" : "2" ), autonStep, autonTimer->Get() );
+		ds->Printf(DriverStationLCD::kUser_Line3, 1, "Gyro: %f", drive->GetGyroAngle() );
+		ds->Printf(DriverStationLCD::kUser_Line4, 1, "Drive PID: %s", drive->IsPIDControl() ? "Enabled" : "Disabled" );
+		ds->Printf(DriverStationLCD::kUser_Line5, 1, "fr: %i, br: %i", drive->frEncoder->Get(), drive->brEncoder->Get() );
+		ds->Printf(DriverStationLCD::kUser_Line6, 1, "fl: %i, bl: %i", drive->flEncoder->Get(), drive->blEncoder->Get() );
+		ds->UpdateLCD();
 		
 	}
 	
