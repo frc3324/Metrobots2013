@@ -63,7 +63,6 @@ private:
 		drive->SetInvertedMotors( false, false, true, true );
 		
 		shooter = new Shooter( shooterMotor, loaderRelay, shooterCounter );
-		shooter->SetPID( true );
 		
 		ds = DriverStationLCD::GetInstance();
 		
@@ -96,38 +95,86 @@ private:
 
 		UpdateOI();
 		
-		if( gamePad->GetButtonDown( GamePad::START ) ){
+		if( driverGamePad->GetButtonDown( GamePad::START ) ){
 			drive->SetFieldOriented( true );
 		}
-		if( gamePad->GetButtonDown( GamePad::BACK ) ){
+		if( driverGamePad->GetButtonDown( GamePad::BACK ) ){
 			drive->SetFieldOriented( false );
 		}
 						
-		drive->SetSlowDrive( gamePad->GetButton( GamePad::LB ) || gamePad->GetButton( GamePad::RB ) );
+		drive->SetSlowDrive( driverGamePad->GetButton( GamePad::LB ) || driverGamePad->GetButton( GamePad::RB ) );
 		
-		drive->SetMecanumXYTurn( gamePad->GetAxis( GamePad::LEFT_X ), gamePad->GetAxis( GamePad::LEFT_Y ), gamePad->GetAxis( GamePad::RIGHT_X ) );
+		drive->SetMecanumXYTurn( driverGamePad->GetAxis( GamePad::LEFT_X ), driverGamePad->GetAxis( GamePad::LEFT_Y ), driverGamePad->GetAxis( GamePad::RIGHT_X ) );
 				
 			
-		if( gamePad->GetButtonDown( GamePad::RIGHT_JS ) ){
+		if( driverGamePad->GetButtonDown( GamePad::RIGHT_JS ) ){
 					
 			drive->SetHoldAngle( true );
 			drive->SetTargetAngle( fmod( drive->GetGyroAngle(), 360.0 ) );
 			
 		}
-		if( gamePad->GetButtonUp( GamePad::RIGHT_JS ) ){
+		if( driverGamePad->GetButtonUp( GamePad::RIGHT_JS ) ){
 					
 			drive->SetHoldAngle( false );
 			
 		}
 							
-		drive->SetPIDControl( gamePad->GetButtonDown( GamePad::B ) ? true : ( gamePad->GetButtonDown( GamePad::Y ) ? false : drive->IsPIDControl() ) );
+		drive->SetPIDControl( driverGamePad->GetButtonDown( GamePad::B ) ? true : ( driverGamePad->GetButtonDown( GamePad::Y ) ? false : drive->IsPIDControl() ) );
 		
-		if( gamePad->GetButton( GamePad::A ) ){
+		if( driverGamePad->GetButton( GamePad::A ) ){
 			drive->ResetGyro();
 		}
 		
+		if( shooterGamePad->GetButton( GamePad::RB ) ){
+			shooter->SetLoaderDirection( Relay::kForward );
+		}
+		else if( shooterGamePad->GetButton( GamePad::LB ) ){
+			shooter->SetLoaderDirection( Relay::kReverse );
+		}
+		else{
+			shooter->SetLoaderDirection( Relay::kOff );
+		}
 		
+		if( shooterGamePad->GetButtonDown( GamePad::A ) ){
+			shooter->SetPID( true );
+			shooter->SetShooterSpeed( Shooter::SETPOINT_RPM );
+		}
+		if( shooterGamePad->GetButtonDown( GamePad::B ) ){
+			shooter->SetShooterSpeed( 0.0 );
+		}
+		if( shooterGamePad->GetButtonDown( GamePad::X ) ){
+			shooter->SetPID( false );
+			shooter->SetShooterSpeed( Shooter::SETPOINT_VOLTAGE );
+		}
 		
+		if( shooterGamePad->GetButtonDown( GamePad::Y ) ){
+			shooter->SetPID( true );
+			shooter->SetShooterSpeed( Shooter::SETPOINT_RPM );
+		}
+		if( shooterGamePad->GetButtonUp( GamePad::Y ) ){
+			shooter->SetPID( false );
+			shooter->SetShooterSpeed( 0.0 );
+		}
+		if( shooterGamePad->GetButton( GamePad::Y ) ){
+			shooter->ShootWhenSpunUp();
+		}
+
+		if( shooterGamePad->GetButtonUp( GamePad::LEFT_JS ) ){
+			shooter->SetShooterSpeed( 0.0 );
+		}
+		if( shooterGamePad->GetButton( GamePad::LEFT_JS ) ){
+			shooter->SetPID( true );
+			shooter->SetShooterSpeed( shooterGamePad->GetAxis( GamePad::LEFT_Y ) * Shooter::MAX_RPM );
+		}
+		
+		if( shooterGamePad->GetButtonUp( GamePad::RIGHT_JS ) ){
+			shooter->SetShooterSpeed( 0.0 );
+		}
+		if( shooterGamePad->GetButton( GamePad::RIGHT_JS ) ){
+			shooter->SetPID( false );
+			shooter->SetShooterSpeed( shooterGamePad->GetAxis( GamePad::RIGHT_Y ) * Shooter::MAX_RPM );
+		}
+				
 		Actuate();
 		PrintToDS();
 		

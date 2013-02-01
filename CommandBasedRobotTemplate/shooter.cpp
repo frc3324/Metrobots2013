@@ -33,7 +33,7 @@ void Shooter::SetLoaderDirection( Relay::Value value ){
 void Shooter::ShootWhenSpunUp(){
 	
 	bool isSpunUp = shooterSpeed <= ( 60.0 / counter->GetPeriod() );
-	loader->Set( isSpunUp ? Relay::kForward : Relay::kOff );
+	SetLoaderDirection( isSpunUp ? Relay::kForward : Relay::kOff );
 	
 }
 
