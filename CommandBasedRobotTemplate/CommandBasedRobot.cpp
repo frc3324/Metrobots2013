@@ -20,9 +20,11 @@ private:
 	Talon *flMotor, *blMotor, *frMotor, *brMotor;
 	Victor *shooterMotor;
 	DualRelay *loaderRelay;
+	Counter *shooterCounter;
 	Encoder *flEncoder, *blEncoder, *frEncoder, *brEncoder; 
 	Gyro *gyro;
-	GamePad *gamePad;
+	GamePad *driverGamePad;
+	GamePad *shooterGamePad;
 	
 	Drive *drive;
 	Shooter *shooter;
@@ -43,6 +45,7 @@ private:
 		
 		shooterMotor = new Victor( 5 );
 		loaderRelay = new DualRelay( 1, 2 );
+		shooterCounter = new Counter( 1 /*Insert Actual port here*/ );
 		
 		flEncoder = new Encoder( 9, 10 );
 		blEncoder = new Encoder( 11, 12 );
@@ -52,22 +55,20 @@ private:
 		gyro = new Gyro( 1 );
 		gyro->Reset();
 
-		gamePad = new GamePad( 1 );
+		driverGamePad = new GamePad( 1 );
+		shooterGamePad = new GamePad( 2 );
 		
 		drive = new Drive( flMotor, blMotor, frMotor, brMotor, 
 							flEncoder, blEncoder, frEncoder, brEncoder, gyro );
 		drive->SetInvertedMotors( false, false, true, true );
 		
-		shooter = new Shooter( shooterMotor, loaderRelay );
+		shooter = new Shooter( shooterMotor, loaderRelay, shooterCounter );
+		shooter->SetPID( true );
 		
 		ds = DriverStationLCD::GetInstance();
 		
 		autonScript = NO_SCRIPT;
 		autonStep = 0;
-		
-		driveControls = 0;
-		// 0 for XYTurn
-		// 1 for RL Strafe
 		
 	}
 	
@@ -94,13 +95,6 @@ private:
 	virtual void TeleopPeriodic() {
 
 		UpdateOI();
-
-		if( gamePad->GetButtonDown( GamePad::X ) ){
-			driveControls = 0; //XYTurn
-		}
-		if( gamePad->GetButtonDown( GamePad::Y ) ){
-			driveControls = 1; //RLStrafe
-		}
 		
 		if( gamePad->GetButtonDown( GamePad::START ) ){
 			drive->SetFieldOriented( true );
@@ -111,12 +105,7 @@ private:
 						
 		drive->SetSlowDrive( gamePad->GetButton( GamePad::LB ) || gamePad->GetButton( GamePad::RB ) );
 		
-		if( driveControls == 0 ){
-			drive->SetMecanumXYTurn( gamePad->GetAxis( GamePad::LEFT_X ), gamePad->GetAxis( GamePad::LEFT_Y ), gamePad->GetAxis( GamePad::RIGHT_X ) );
-		}
-		if( driveControls == 1 ){
-			drive->SetMecanumRLStrafe( gamePad->GetAxis( GamePad::RIGHT_Y ), gamePad->GetAxis( GamePad::LEFT_Y ), gamePad->GetAxis( GamePad::TRIGGER ) );
-		}
+		drive->SetMecanumXYTurn( gamePad->GetAxis( GamePad::LEFT_X ), gamePad->GetAxis( GamePad::LEFT_Y ), gamePad->GetAxis( GamePad::RIGHT_X ) );
 				
 			
 		if( gamePad->GetButtonDown( GamePad::RIGHT_JS ) ){
@@ -131,13 +120,13 @@ private:
 			
 		}
 							
-		drive->SetPIDControl( gamePad->GetButton( GamePad::B ) );
+		drive->SetPIDControl( gamePad->GetButtonDown( GamePad::B ) ? true : ( gamePad->GetButtonDown( GamePad::Y ) ? false : drive->IsPIDControl() ) );
 		
 		if( gamePad->GetButton( GamePad::A ) ){
-					
-					drive->ResetGyro();
-					
-		}				
+			drive->ResetGyro();
+		}
+		
+		
 		
 		Actuate();
 		PrintToDS();
@@ -171,8 +160,9 @@ private:
 	}
 	
 	void UpdateOI(){
-		
-		gamePad->Update();
+
+		driverGamePad->Update();
+		shooterGamePad->Update();
 		
 	}
 	
