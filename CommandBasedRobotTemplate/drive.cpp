@@ -172,7 +172,7 @@ bool Drive::IsFieldOriented(){
 void Drive::SetHoldAngle( bool isOn, double degrees ){
 
 	isHoldAngle = isOn;
-	targetAngle = degrees;
+	targetAngle = fmod( degrees, 360.0 );
 
 }
 
