@@ -14,6 +14,9 @@ class Shooter {
 		void SetLoaderDirection( Relay::Value value );
 		void ShootWhenSpunUp();
 		void SetPID( bool value );
+		bool IsPID();
+		double GetSetpoint();
+		double GetActualSpeed();
 		void Actuate();
 		void Disable();
 		
@@ -33,6 +36,7 @@ class Shooter {
 		
 		bool isPID;
 		double shooterSpeed;
+		double actualSpeed;
 		Relay::Value loaderDirection;
 	
 };

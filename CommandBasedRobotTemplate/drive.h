@@ -16,8 +16,7 @@ class Drive {
 		void Disable();
 		void SetMecanumXYTurn( double x, double y, double turn );
 		void SetMecanumRLStrafe( double leftSide, double rightSide, double strafe );
-		void SetTargetAngle( double degrees );
-		void SetHoldAngle( bool value );
+		void SetHoldAngle( bool isOn, double degrees = 0.0 );
 		double GetDistMoved();
 		void ResetEncoders();
 		void ResetGyro();

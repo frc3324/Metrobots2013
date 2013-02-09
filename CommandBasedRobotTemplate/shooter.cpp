@@ -8,6 +8,7 @@ Shooter::Shooter( SpeedController *motor_, DualRelay *loader_, Counter *counter_
 	counter = counter_;
 	
 	shooterSpeed = 0.0;
+	actualSpeed = 0.0;
 	loaderDirection = Relay::kOff;
 	isPID = false;
 	
@@ -54,9 +55,28 @@ void Shooter::SetPID( bool value ){
 	
 }
 
+bool Shooter::IsPID(){
+	
+	return isPID;
+	
+}
+
+double Shooter::GetSetpoint(){
+	
+	return shooterSpeed;
+	
+}
+
+double Shooter::GetActualSpeed(){
+	
+	return actualSpeed;
+	
+}
+
 void Shooter::Actuate(){
 	
-	shooterPID->SetSource( 60.0 / counter->GetPeriod() );
+	actualSpeed = 30.0 / counter->GetPeriod();
+	shooterPID->SetSource( actualSpeed );
 	shooterPID->SetSetpoint( shooterSpeed );
 	
 	double setSpeed = shooterSpeed;
