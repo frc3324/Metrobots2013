@@ -109,7 +109,7 @@ private:
 				if( timer->Get() >= 5.0 || drive->GetDistMoved() < -1000 ){ step++; timer->Reset(); }
 			case 4:
 				drive->SetPIDControl( true );
-				drive->SetMecanumXYTurn( 0.0, 0.4, 0.0 );
+				drive->SetMecanumXYTurn( 0.0, 0.0, 0.0 );
 			}
 			break;
 		case NoScript:
