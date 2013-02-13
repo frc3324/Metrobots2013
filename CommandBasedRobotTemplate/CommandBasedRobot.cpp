@@ -12,7 +12,7 @@
 class CommandBasedRobot : public IterativeRobot {
 private:
 	
-	typedef enum {NoScript, ShootScript} AutonScript;
+	typedef enum {NoScript, ShootScript, DriveScript} AutonScript;
 	AutonScript script;
 	int step;
 	Timer *timer;
@@ -86,6 +86,30 @@ private:
 			case 1:
 				shooter->ShootWhenSpunUp();
 				if( timer->Get() >= 15.0 ){ step++; timer->Reset(); }
+				break;
+			}
+			break;
+		case DriveScript:
+			switch (step){
+			case 0:
+				drive->SetPIDControl( false );
+				drive->SetFieldOriented( false );
+				drive->SetTargetAngle( drive->GetGyroAngle() + 90.0 );
+				if( timer->Get() >= 0.0 ){ step++; timer->Reset(); }
+				break;
+			case 1:
+				drive->SetHoldAngle( true );
+				if( timer->Get() >= 5.0 || fabs(drive->GetGyroAngle()-drive->targetAngle) < 5.0 ){ step++; timer->Reset(); }
+				break;
+			case 2:
+				drive->ResetEncoders();
+				if( timer->Get() >= 2.0 ){ step++; timer->Reset(); }
+			case 3:
+				drive->SetMecanumXYTurn( 0.0, 0.4, 0.0 );
+				if( timer->Get() >= 5.0 || drive->GetDistMoved() < -1000 ){ step++; timer->Reset(); }
+			case 4:
+				drive->SetPIDControl( true );
+				drive->SetMecanumXYTurn( 0.0, 0.4, 0.0 );
 			}
 			break;
 		case NoScript:
@@ -147,10 +171,10 @@ private:
 		 * B: Hold to hold vision target angle (not implemented yet)
 		 */
 		if( driverGamePad->GetButtonDown( GamePad::RIGHT_JS ) ){	
-			drive->SetHoldAngle( true, drive->GetGyroAngle() );			
+			drive->SetTargetAngle( drive->GetGyroAngle() );			
 		}
 		if( driverGamePad->GetButtonDown( GamePad::B ) ){	
-			drive->SetHoldAngle( true, drive->GetGyroAngle() /*Insert Vision angle here*/ );			
+			drive->SetTargetAngle( drive->GetGyroAngle() /*Insert Vision angle here*/ );			
 		}
 		drive->SetHoldAngle( driverGamePad->GetButton( GamePad::RIGHT_JS ) || driverGamePad->GetButton( GamePad::B ) );
 							
@@ -217,7 +241,7 @@ private:
 		 */
 		if( shooterGamePad->GetButton( GamePad::RIGHT_JS ) ){
 			shooter->SetPID( false );
-			shooter->SetShooterSpeed( shooterGamePad->GetAxis( GamePad::RIGHT_Y ) * Shooter::MAX_RPM );
+			shooter->SetShooterSpeed( shooterGamePad->GetAxis( GamePad::RIGHT_Y ) );
 		}
 		
 		Actuate();
@@ -241,6 +265,10 @@ private:
 		
 		if( shooterGamePad->GetButtonDown( GamePad::B ) ){
 			script = NoScript;
+		}
+		
+		if( shooterGamePad->GetButtonDown( GamePad::X ) ){
+			script = DriveScript;
 		}
 		
 		PrintToDS();
@@ -272,8 +300,8 @@ private:
 		
 		ds->Clear();
 		ds->Printf(DriverStationLCD::kUser_Line1, 1, "Auton: %s", script == ShootScript ? "Shoot" : ( script == NoScript ? "None" : "YOU BROKE IT" ) );
-		ds->Printf(DriverStationLCD::kUser_Line2, 1, "Drive Gyro: %f", drive->GetGyroAngle() );
-		ds->Printf(DriverStationLCD::kUser_Line3, 1, "Drive PID: %s, FO: %s", drive->IsPIDControl() ? "On" : "Off", drive->IsFieldOriented() ? "On" : "Off" );
+		ds->Printf(DriverStationLCD::kUser_Line2, 1, "Drive Gyro: %f", /*drive->GetGyroAngle()*/drive->GetDistMoved() );
+		ds->Printf(DriverStationLCD::kUser_Line3, 1, "PID: %s, FO: %s", drive->IsPIDControl() ? "On" : "Off", drive->IsFieldOriented() ? "On" : "Off" );
 		ds->Printf(DriverStationLCD::kUser_Line4, 1, "Shooter PID: %s", shooter->IsPID() ? "On" : "Off");
 		ds->Printf(DriverStationLCD::kUser_Line5, 1, "Shooter SET: %f", shooter->GetSetpoint() );
 		ds->Printf(DriverStationLCD::kUser_Line6, 1, "Shooter REAL: %f", shooter->GetActualSpeed() );

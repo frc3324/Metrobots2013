@@ -14,7 +14,7 @@ class GamePad {
 		bool GetButtonDown( int button );
 		bool GetButtonUp( int button );
 
-		static const double AXIS_DEADBAND = 0.05;
+		static const double AXIS_DEADBAND = 0.10;
 		
 		static const int A = 1;
 		static const int B = 2;
