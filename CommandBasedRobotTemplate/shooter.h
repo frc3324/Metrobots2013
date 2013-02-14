@@ -13,6 +13,7 @@ class Shooter {
 		void SetShooterSpeed( double value );
 		void SetLoaderDirection( Relay::Value value );
 		void ShootWhenSpunUp();
+		bool IsSpunUp();
 		void SetPID( bool value );
 		bool IsPID();
 		double GetSetpoint();
@@ -24,8 +25,9 @@ class Shooter {
 		static const double PID_I = 0.0;
 		static const double PID_D = 0.0;
 
-		static const double MAX_RPM = 5300.0;
-		static const double SETPOINT_RPM = 4800.0;
+		static const double MAX_RPM = 3000.0;
+		static const double SPUN_UP_TOLERENCE = 100.0;
+		static const double SETPOINT_RPM = 1800.0;
 		static const double SETPOINT_VOLTAGE = 1.0;
 		
 	private:

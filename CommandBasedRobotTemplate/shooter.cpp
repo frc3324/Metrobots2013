@@ -32,10 +32,11 @@ void Shooter::SetLoaderDirection( Relay::Value value ){
 }
 
 void Shooter::ShootWhenSpunUp(){
-	
-	bool isSpunUp = shooterSpeed <= ( 60.0 / counter->GetPeriod() );
-	SetLoaderDirection( isSpunUp ? Relay::kForward : Relay::kOff );
-	
+	SetLoaderDirection( IsSpunUp() ? Relay::kForward : Relay::kOff );
+}
+
+bool Shooter::IsSpunUp(){
+	return actualSpeed >= shooterSpeed - Shooter::SPUN_UP_TOLERENCE;
 }
 
 void Shooter::SetPID( bool value ){
@@ -43,34 +44,24 @@ void Shooter::SetPID( bool value ){
 	isPID = value;
 	
 	if( isPID ){
-		
 		shooterPID->Enable();
-		
 	}
 	else{
-		
 		shooterPID->Disable();
-		
 	}
 	
 }
 
 bool Shooter::IsPID(){
-	
 	return isPID;
-	
 }
 
 double Shooter::GetSetpoint(){
-	
 	return shooterSpeed;
-	
 }
 
 double Shooter::GetActualSpeed(){
-	
 	return actualSpeed;
-	
 }
 
 void Shooter::Actuate(){
