@@ -95,6 +95,8 @@ void Shooter::Actuate(){
 
 void Shooter::Disable(){
 	
+	shooterSpeed = 0.0;
+	loaderDirection = Relay::kOff;
 	motor->Set( 0.0 );
 	loader->Set( Relay::kOff );
 	
