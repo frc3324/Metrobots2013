@@ -7,7 +7,7 @@ Vision::Vision() {
 	net = NetworkTable::GetTable("net");
 }
 
-Vision Vision::GetInstance() {
+Vision* Vision::GetInstance() {
 	if( instance == NULL ){
 		instance = new Vision();
 	}
@@ -15,7 +15,7 @@ Vision Vision::GetInstance() {
 }
 
 bool Vision::HasTarget() {
-	
+	return true;
 }
 
 double Vision::GetAngleOffset() {
@@ -23,7 +23,7 @@ double Vision::GetAngleOffset() {
 }
 
 double Vision::GetDistance() {
-	
+	return net->GetNumber("test", 0);
 }
 
 void Vision::Update() {

@@ -5,6 +5,7 @@
 #include "util/dualrelay.h"
 #include "drive.h"
 #include "shooter.h"
+#include "vision.h"
 #include <stdio.h>
 #include <Math.h>
 
@@ -28,6 +29,7 @@ private:
 	
 	Drive *drive;
 	Shooter *shooter;
+	Vision *vision;
 	
 	DriverStationLCD *ds;
 		
@@ -52,6 +54,8 @@ private:
 
 		driverGamePad = new GamePad( 1 );
 		shooterGamePad = new GamePad( 2 );
+		
+		vision = Vision::GetInstance();
 		
 		drive = new Drive( flMotor, blMotor, frMotor, brMotor, flEncoder, blEncoder, frEncoder, brEncoder, gyro );
 		drive->SetInvertedMotors( false, false, true, true );
@@ -300,7 +304,7 @@ private:
 		
 		ds->Clear();
 		ds->Printf(DriverStationLCD::kUser_Line1, 1, "Auton: %s", script == ShootScript ? "Shoot" : ( script == NoScript ? "None" : "YOU BROKE IT" ) );
-		ds->Printf(DriverStationLCD::kUser_Line2, 1, "Drive Gyro: %f", /*drive->GetGyroAngle()*/drive->GetDistMoved() );
+		ds->Printf(DriverStationLCD::kUser_Line2, 1, "Testing NetworkTables: %f", vision->GetDistance() );
 		ds->Printf(DriverStationLCD::kUser_Line3, 1, "PID: %s, FO: %s", drive->IsPIDControl() ? "On" : "Off", drive->IsFieldOriented() ? "On" : "Off" );
 		ds->Printf(DriverStationLCD::kUser_Line4, 1, "Shooter PID: %s", shooter->IsPID() ? "On" : "Off");
 		ds->Printf(DriverStationLCD::kUser_Line5, 1, "Shooter SET: %f", shooter->GetSetpoint() );

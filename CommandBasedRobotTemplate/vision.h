@@ -9,10 +9,10 @@ class Vision{
 	double GetAngleOffset();
 	double GetDistance();
 	void Update();
-	static Vision GetInstance();
+	static Vision* GetInstance();
   private:
 	NetworkTable *net;
-	Vision *instance;
+	static Vision *instance;
   protected:
 	Vision();
 };
