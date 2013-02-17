@@ -176,7 +176,7 @@ private:
 		/*
 		 * Hold Angle
 		 * RIGHT_JS_BUTTON: Hold to hold current angle
-		 * B: Hold to hold vision target angle (not implemented yet)
+		 * B: Hold to hold vision target angle
 		 */
 		if( driverGamePad->GetButtonDown( GamePad::RIGHT_JS ) ){	
 			drive->SetTargetAngle( drive->GetGyroAngle() );			
@@ -196,9 +196,8 @@ private:
 		/*
 		 * Shooter Setpoint with Speed Control
 		 * A: Press to enable
-		 * Y: Press to enable
 		 */
-		if( shooterGamePad->GetButtonDown( GamePad::A ) /*|| shooterGamePad->GetButtonDown( GamePad::Y )*/ ){
+		if( shooterGamePad->GetButtonDown( GamePad::A ) ){
 			shooter->SetPID( true );
 			shooter->SetShooterSpeed( Shooter::SETPOINT_RPM );
 		}
@@ -223,7 +222,6 @@ private:
 		/*
 		 * Shoot when Spun Up
 		 * Y: Hold to Shoot when spun up
-		 * Y: Press once to enable shooter ( See above )
 		 */
 		if( shooterGamePad->GetButton( GamePad::Y ) ){
 			shooter->ShootWhenSpunUp();
