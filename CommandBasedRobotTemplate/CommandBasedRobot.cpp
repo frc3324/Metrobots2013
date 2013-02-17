@@ -60,10 +60,10 @@ private:
 		shooter = new Shooter( shooterMotor, loaderRelay, shooterCounter );
 		
 		ds = DriverStationLCD::GetInstance();
-		
-		NetworkTable::SetServerMode();
-		NetworkTable::Initialize();
+
 		net = NetworkTable::GetTable("net");
+		net->PutNumber("angle", 0.0);
+		net->PutBoolean("hasAngle", 0.0);
 		
 		script = ShootScript;
 		step = 0;
@@ -84,8 +84,8 @@ private:
 		case ShootScript:
 			switch (step){
 			case 0:
-				shooter->SetPID( true );
-				shooter->SetShooterSpeed( Shooter::SETPOINT_RPM );
+				shooter->SetPID( false );
+				shooter->SetShooterSpeed( Shooter::SETPOINT_VOLTAGE );
 				if( timer->Get() >= 0.0 ){ step++; timer->Reset(); }
 				break;
 			case 1:
@@ -99,26 +99,27 @@ private:
 		case DriveScript:
 			switch (step){
 			case 0:
-				drive->SetPIDControl( false );
-				drive->SetFieldOriented( false );
+				drive->SetPIDControl(false);
+				drive->SetFieldOriented(false);
 				drive->SetTargetAngle( drive->GetGyroAngle() + 90.0 );
-				if( timer->Get() >= 0.0 ){ step++; timer->Reset(); }
+				drive->SetHoldAngle(true);
+				timer->Reset();
+				step++;
 				break;
 			case 1:
-				drive->SetHoldAngle( true );
-				if( timer->Get() >= 5.0 || fabs(drive->GetGyroAngle()-drive->targetAngle) < 5.0 ){ step++; timer->Reset(); }
+				if( timer->Get() > 2.0 || AngleDiff(drive->GetGyroAngle(), drive->targetAngle) < 5.0 ){ timer->Reset(); step++; }
 				break;
 			case 2:
-				drive->ResetEncoders();
-				if( timer->Get() >= 2.0 ){ step++; timer->Reset(); }
-			case 3:
 				drive->SetMecanumXYTurn( 0.0, 0.4, 0.0 );
-				if( timer->Get() >= 5.0 || drive->GetDistMoved() > 1000 ){ step++; timer->Reset(); }
-			case 4:
+				if( drive->GetDistMoved() > 300 ){ timer->Reset(); step++; }
+				break;
+			case 3:
 				drive->SetPIDControl( true );
+				drive->SetHoldAngle( false );
 				drive->SetMecanumXYTurn( 0.0, 0.0, 0.0 );
+				step++;
+				break;
 			}
-			break;
 		case NoScript:
 			break;
 		}
@@ -128,7 +129,7 @@ private:
 	
 	virtual void TeleopInit() {
 		
-		
+		drive->SetFieldOriented(true);
 		
 	}
 	
@@ -197,7 +198,7 @@ private:
 		 * A: Press to enable
 		 * Y: Press to enable
 		 */
-		if( shooterGamePad->GetButtonDown( GamePad::A ) || shooterGamePad->GetButtonDown( GamePad::Y ) ){
+		if( shooterGamePad->GetButtonDown( GamePad::A ) /*|| shooterGamePad->GetButtonDown( GamePad::Y )*/ ){
 			shooter->SetPID( true );
 			shooter->SetShooterSpeed( Shooter::SETPOINT_RPM );
 		}
@@ -306,7 +307,7 @@ private:
 		
 		ds->Clear();
 		ds->Printf(DriverStationLCD::kUser_Line1, 1, "Auton: %s", script == ShootScript ? "Shoot" : ( script == DriveScript ? "Drive(test)" : ( script == NoScript ? "None" : "YOU BROKE IT" ) ) );
-		ds->Printf(DriverStationLCD::kUser_Line2, 1, "net: %f", GetDistance() );
+		ds->Printf(DriverStationLCD::kUser_Line2, 1, "net: %f", fmod(fabs(drive->GetGyroAngle()-drive->targetAngle), 360.0) );
 		ds->Printf(DriverStationLCD::kUser_Line3, 1, "PID: %s, FO: %s", drive->IsPIDControl() ? "On" : "Off", drive->IsFieldOriented() ? "On" : "Off" );
 		ds->Printf(DriverStationLCD::kUser_Line4, 1, "Shooter PID: %s", shooter->IsPID() ? "On" : "Off");
 		ds->Printf(DriverStationLCD::kUser_Line5, 1, "Shooter SET: %f", shooter->GetSetpoint() );
@@ -316,23 +317,25 @@ private:
 	}
 	
 	double GetAbsoluteAngle() {
-		double x = net->GetNumber("xComp", 0.0);
-		//double y = net->GetNumber("yComp", 0.0);
-		double z = net->GetNumber("zComp", 0.0);
-		
-		double angle = atan(x / z);
-		if( x < 0.0 ){
-			angle = -angle;
+		if( net->IsConnected() ){
+			return net->GetNumber("angle") + drive->GetGyroAngle();
 		}
-		return angle + drive->GetGyroAngle();
-	}
-	
-	double GetDistance(){
-		return net->GetNumber("zComp", 0.0);
+		else{
+			return 0.0;
+		}
 	}
 	
 	bool HasTarget(){
-		return net->GetBoolean("hasTarget", false);
+		if( net->IsConnected() ){
+			return net->GetBoolean("hasTarget", false);
+		}
+		else{
+			return false;
+		}
+	}
+	
+	double AngleDiff( double angle1, double angle2 ){
+		return fmod(angle1 - angle2 + 180.0, 360.0) - 180.0;
 	}
 	
 };

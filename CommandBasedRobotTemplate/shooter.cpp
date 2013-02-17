@@ -36,7 +36,7 @@ void Shooter::ShootWhenSpunUp(){
 }
 
 bool Shooter::IsSpunUp(){
-	return actualSpeed >= shooterSpeed - Shooter::SPUN_UP_TOLERENCE;
+	return actualSpeed >= Shooter::SETPOINT_RPM - Shooter::SPUN_UP_TOLERENCE;
 }
 
 void Shooter::SetPID( bool value ){
