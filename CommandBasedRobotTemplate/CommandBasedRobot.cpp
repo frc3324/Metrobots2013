@@ -14,7 +14,7 @@ private:
 	typedef enum {NoScript, ShootScript, DriveScript} AutonScript;
 	AutonScript script;
 	int step;
-	Timer *timer;
+	Timer *timer, *freshness;
 	
 	Talon *flMotor, *blMotor, *frMotor, *brMotor;
 	Victor *shooterMotor;
@@ -29,7 +29,7 @@ private:
 	Shooter *shooter;
 	
 	DriverStationLCD *ds;
-	NetworkTable *net;
+	NetworkTable *table;
 	
 	virtual void RobotInit() {
 		
@@ -37,6 +37,9 @@ private:
 		blMotor = new Talon( 2 );
 		frMotor = new Talon( 3 );
 		brMotor = new Talon( 4 );
+		
+		timer = new Timer();
+		freshness = new Timer();
 		
 		shooterMotor = new Victor( 5 );
 		loaderRelay = new DualRelay( 1, 2 );
@@ -61,13 +64,17 @@ private:
 		
 		ds = DriverStationLCD::GetInstance();
 
-		net = NetworkTable::GetTable("net");
-		net->PutNumber("angle", 0.0);
-		net->PutBoolean("hasAngle", 0.0);
+		table = NetworkTable::GetTable("net");
+		//net->PutNumber("angle", 0.0);
+		//net->PutBoolean("hasAngle", 0.0);
 		
 		script = ShootScript;
 		step = 0;
+		timer->Reset();
 		timer->Start();
+		
+		freshness->Reset();
+		freshness->Start();
 		
 	}
 	
@@ -298,15 +305,19 @@ private:
 
 		driverGamePad->Update();
 		shooterGamePad->Update();
+		IsFreshTarget();
 		
 	}
 	
 	void PrintToDS(){
 		
 		ds->Clear();
-		ds->Printf(DriverStationLCD::kUser_Line1, 1, "Auton: %s", script == ShootScript ? "Shoot" : ( script == DriveScript ? "Drive(test)" : ( script == NoScript ? "None" : "YOU BROKE IT" ) ) );
-		ds->Printf(DriverStationLCD::kUser_Line2, 1, "net: %f", fmod(fabs(drive->GetGyroAngle()-drive->targetAngle), 360.0) );
-		ds->Printf(DriverStationLCD::kUser_Line3, 1, "PID: %s, FO: %s", drive->IsPIDControl() ? "On" : "Off", drive->IsFieldOriented() ? "On" : "Off" );
+		//ds->Printf(DriverStationLCD::kUser_Line1, 1, "Auton: %s", script == ShootScript ? "Shoot" : ( script == DriveScript ? "Drive(test)" : ( script == NoScript ? "None" : "YOU BROKE IT" ) ) );
+		//ds->Printf(DriverStationLCD::kUser_Line2, 1, "net: %f", fmod(fabs(drive->GetGyroAngle()-drive->targetAngle), 360.0) );
+		//ds->Printf(DriverStationLCD::kUser_Line3, 1, "PID: %s, FO: %s", drive->IsPIDControl() ? "On" : "Off", drive->IsFieldOriented() ? "On" : "Off" );
+		//ds->Printf(DriverStationLCD::kUser_Line1, 1, "Connected to ODROID: %s", net->IsConnected() ? "True" : "False");
+		ds->Printf(DriverStationLCD::kUser_Line2, 1, "%s, %f", HasTarget() ? "Has Target" : "No Target", freshness->Get());
+		ds->Printf(DriverStationLCD::kUser_Line3, 1, "Target Angle: %f", GetRelativeAngle() );
 		ds->Printf(DriverStationLCD::kUser_Line4, 1, "Shooter PID: %s", shooter->IsPID() ? "On" : "Off");
 		ds->Printf(DriverStationLCD::kUser_Line5, 1, "Shooter SET: %f", shooter->GetSetpoint() );
 		ds->Printf(DriverStationLCD::kUser_Line6, 1, "Shooter REAL: %f", shooter->GetActualSpeed() );
@@ -315,21 +326,24 @@ private:
 	}
 	
 	double GetAbsoluteAngle() {
-		if( net->IsConnected() ){
-			return net->GetNumber("angle") + drive->GetGyroAngle();
-		}
-		else{
-			return 0.0;
-		}
+		return table->GetNumber("angle", 0.0) + drive->GetGyroAngle();
+	}
+	
+	double GetRelativeAngle() {
+		return table->GetNumber("angle", 0.0);
 	}
 	
 	bool HasTarget(){
-		if( net->IsConnected() ){
-			return net->GetBoolean("hasTarget", false);
+		return table->GetBoolean("hasTarget", false);
+	}
+	
+	bool IsFreshTarget() {
+		bool isFresh = table->GetBoolean("isFresh", false);
+		if(isFresh) {
+			freshness->Reset();
 		}
-		else{
-			return false;
-		}
+		table->PutBoolean("isFresh", false);
+		return isFresh;
 	}
 	
 	double AngleDiff( double angle1, double angle2 ){
