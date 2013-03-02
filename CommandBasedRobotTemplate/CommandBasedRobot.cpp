@@ -19,6 +19,8 @@ private:
 	Talon *flMotor, *blMotor, *frMotor, *brMotor;
 	Victor *shooterMotor;
 	DualRelay *loaderRelay;
+	DualRelay *netRelay;
+	DigitalInput *netLimit;
 	Counter *shooterCounter;
 	Encoder *flEncoder, *blEncoder, *frEncoder, *brEncoder; 
 	Gyro *gyro;
@@ -43,6 +45,8 @@ private:
 		
 		shooterMotor = new Victor( 5 );
 		loaderRelay = new DualRelay( 1, 2 );
+		netRelay = new DualRelay( 3, 4 );
+		netLimit = new DigitalInput( 2 );
 		shooterCounter = new Counter( 1 /*Insert Actual port here*/ );
 		
 		flEncoder = new Encoder( 9, 10 );
@@ -188,7 +192,7 @@ private:
 		if( driverGamePad->GetButtonDown( GamePad::RIGHT_JS ) ){	
 			drive->SetTargetAngle( drive->GetGyroAngle() );			
 		}
-		if( driverGamePad->GetButtonDown( GamePad::B ) ){	
+		if( driverGamePad->GetButton/*Down*/( GamePad::B ) ){	
 			drive->SetTargetAngle( HasTarget() ? GetAbsoluteAngle() : drive->GetGyroAngle() );			
 		}
 		drive->SetHoldAngle( driverGamePad->GetButton( GamePad::RIGHT_JS ) || driverGamePad->GetButton( GamePad::B ) );					
@@ -199,6 +203,8 @@ private:
 		 * LB: Hold to run Reverse
 		 */
 		shooter->SetLoaderDirection( shooterGamePad->GetButton( GamePad::RB ) ? Relay::kForward : ( shooterGamePad->GetButton( GamePad::LB ) ? Relay::kReverse : Relay::kOff ) );
+		netRelay->Set( (shooterGamePad->GetButton( GamePad::START ) && netLimit->Get()) ? Relay::kForward : ( shooterGamePad->GetButton( GamePad::BACK ) ? Relay::kReverse : Relay::kOff ) );
+
 		
 		/*
 		 * Shooter Setpoint with Speed Control
@@ -315,7 +321,7 @@ private:
 		//ds->Printf(DriverStationLCD::kUser_Line1, 1, "Auton: %s", script == ShootScript ? "Shoot" : ( script == DriveScript ? "Drive(test)" : ( script == NoScript ? "None" : "YOU BROKE IT" ) ) );
 		//ds->Printf(DriverStationLCD::kUser_Line2, 1, "net: %f", fmod(fabs(drive->GetGyroAngle()-drive->targetAngle), 360.0) );
 		//ds->Printf(DriverStationLCD::kUser_Line3, 1, "PID: %s, FO: %s", drive->IsPIDControl() ? "On" : "Off", drive->IsFieldOriented() ? "On" : "Off" );
-		//ds->Printf(DriverStationLCD::kUser_Line1, 1, "Connected to ODROID: %s", net->IsConnected() ? "True" : "False");
+		ds->Printf(DriverStationLCD::kUser_Line1, 1, "lim: %s", netLimit->Get() ? "True" : "False");
 		ds->Printf(DriverStationLCD::kUser_Line2, 1, "%s, %f", HasTarget() ? "Has Target" : "No Target", freshness->Get());
 		ds->Printf(DriverStationLCD::kUser_Line3, 1, "Target Angle: %f", GetRelativeAngle() );
 		ds->Printf(DriverStationLCD::kUser_Line4, 1, "Shooter PID: %s", shooter->IsPID() ? "On" : "Off");
