@@ -4,7 +4,7 @@
 /* must be accompanied by the FIRST BSD license file in $(WIND_BASE)/WPILib.  */
 /*----------------------------------------------------------------------------*/
 
-#include "Counter.h"
+#include "MetroCounter.h"
 #include "AnalogTrigger.h"
 #include "DigitalInput.h"
 #include "NetworkCommunication/UsageReporting.h"
@@ -17,7 +17,7 @@ static Resource *counters = NULL;
  * Create an instance of a counter object.
  * This creates a ChipObject counter and initializes status variables appropriately
  */
-void Counter::InitCounter(Mode mode)
+void MetroCounter::InitCounter(Mode mode)
 {
 	Resource::CreateResourceObject(&counters, tCounter::kNumSystems);
 	UINT32 index = counters->Allocate("Counter");
@@ -45,7 +45,7 @@ void Counter::InitCounter(Mode mode)
  * Then they all must be selected by calling functions to specify the upsource and the downsource
  * independently.
  */
-Counter::Counter() :
+MetroCounter::Counter() :
 	m_upSource(NULL),
 	m_downSource(NULL),
 	m_counter(NULL)
@@ -58,7 +58,7 @@ Counter::Counter() :
  * This is used if an existing digital input is to be shared by multiple other objects such
  * as encoders.
  */
-Counter::Counter(DigitalSource *source) :
+MetroCounter::Counter(DigitalSource *source) :
 	m_upSource(NULL),
 	m_downSource(NULL),
 	m_counter(NULL)
@@ -68,7 +68,7 @@ Counter::Counter(DigitalSource *source) :
 	ClearDownSource();
 }
 
-Counter::Counter(DigitalSource &source) :
+MetroCounter::Counter(DigitalSource &source) :
 	m_upSource(NULL),
 	m_downSource(NULL),
 	m_counter(NULL)
@@ -82,7 +82,7 @@ Counter::Counter(DigitalSource &source) :
  * Create an instance of a Counter object.
  * Create an up-Counter instance given a channel. The default digital module is assumed.
  */
-Counter::Counter(UINT32 channel) :
+MetroCounter::Counter(UINT32 channel) :
 	m_upSource(NULL),
 	m_downSource(NULL),
 	m_counter(NULL)
@@ -98,7 +98,7 @@ Counter::Counter(UINT32 channel) :
  * @param moduleNumber The digital module (1 or 2).
  * @param channel The channel in the digital module
  */
-Counter::Counter(UINT8 moduleNumber, UINT32 channel) :
+MetroCounter::Counter(UINT8 moduleNumber, UINT32 channel) :
 	m_upSource(NULL),
 	m_downSource(NULL),
 	m_counter(NULL)
@@ -113,7 +113,7 @@ Counter::Counter(UINT8 moduleNumber, UINT32 channel) :
  * Create an instance of a simple up-Counter given an analog trigger.
  * Use the trigger state output from the analog trigger.
  */
-Counter::Counter(AnalogTrigger *trigger) :
+MetroCounter::Counter(AnalogTrigger *trigger) :
 	m_upSource(NULL),
 	m_downSource(NULL),
 	m_counter(NULL)
@@ -124,7 +124,7 @@ Counter::Counter(AnalogTrigger *trigger) :
 	m_allocatedUpSource = true;
 }
 
-Counter::Counter(AnalogTrigger &trigger) :
+MetroCounter::Counter(AnalogTrigger &trigger) :
 	m_upSource(NULL),
 	m_downSource(NULL),
 	m_counter(NULL)
@@ -135,7 +135,7 @@ Counter::Counter(AnalogTrigger &trigger) :
 	m_allocatedUpSource = true;
 }
 
-Counter::Counter(EncodingType encodingType, DigitalSource *upSource, DigitalSource *downSource, bool inverted) :
+MetroCounter::Counter(EncodingType encodingType, DigitalSource *upSource, DigitalSource *downSource, bool inverted) :
 	m_upSource(NULL),
 	m_downSource(NULL),
 	m_counter(NULL)
@@ -168,7 +168,7 @@ Counter::Counter(EncodingType encodingType, DigitalSource *upSource, DigitalSour
 /**
  * Delete the Counter object.
  */
-Counter::~Counter()
+MetroCounter::~Counter()
 {
 	SetUpdateWhenEmpty(true);
 	if (m_allocatedUpSource)
@@ -192,7 +192,7 @@ Counter::~Counter()
  * @param moduleNumber The digital module (1 or 2).
  * @param channel The digital channel (1..14).
  */
-void Counter::SetUpSource(UINT8 moduleNumber, UINT32 channel)
+void MetroCounter::SetUpSource(UINT8 moduleNumber, UINT32 channel)
 {
 	if (StatusIsFatal()) return;
 	SetUpSource(new DigitalInput(moduleNumber, channel));
@@ -203,7 +203,7 @@ void Counter::SetUpSource(UINT8 moduleNumber, UINT32 channel)
  * Set the upsource for the counter as a digital input channel.
  * The slot will be the default digital module slot.
  */
-void Counter::SetUpSource(UINT32 channel)
+void MetroCounter::SetUpSource(UINT32 channel)
 {
 	if (StatusIsFatal()) return;
 	SetUpSource(GetDefaultDigitalModule(), channel);
@@ -215,7 +215,7 @@ void Counter::SetUpSource(UINT32 channel)
  * @param analogTrigger The analog trigger object that is used for the Up Source
  * @param triggerType The analog trigger output that will trigger the counter.
  */
-void Counter::SetUpSource(AnalogTrigger *analogTrigger, AnalogTriggerOutput::Type triggerType)
+void MetroCounter::SetUpSource(AnalogTrigger *analogTrigger, AnalogTriggerOutput::Type triggerType)
 {
 	if (StatusIsFatal()) return;
 	SetUpSource(analogTrigger->CreateOutput(triggerType));
@@ -227,7 +227,7 @@ void Counter::SetUpSource(AnalogTrigger *analogTrigger, AnalogTriggerOutput::Typ
  * @param analogTrigger The analog trigger object that is used for the Up Source
  * @param triggerType The analog trigger output that will trigger the counter.
  */
-void Counter::SetUpSource(AnalogTrigger &analogTrigger, AnalogTriggerOutput::Type triggerType)
+void MetroCounter::SetUpSource(AnalogTrigger &analogTrigger, AnalogTriggerOutput::Type triggerType)
 {
 	SetUpSource(&analogTrigger, triggerType);
 }
@@ -236,7 +236,7 @@ void Counter::SetUpSource(AnalogTrigger &analogTrigger, AnalogTriggerOutput::Typ
  * Set the source object that causes the counter to count up.
  * Set the up counting DigitalSource.
  */
-void Counter::SetUpSource(DigitalSource *source)
+void MetroCounter::SetUpSource(DigitalSource *source)
 {
 	if (StatusIsFatal()) return;
 	if (m_allocatedUpSource)
@@ -271,7 +271,7 @@ void Counter::SetUpSource(DigitalSource *source)
  * Set the source object that causes the counter to count up.
  * Set the up counting DigitalSource.
  */
-void Counter::SetUpSource(DigitalSource &source)
+void MetroCounter::SetUpSource(DigitalSource &source)
 {
 	SetUpSource(&source);
 }
@@ -280,7 +280,7 @@ void Counter::SetUpSource(DigitalSource &source)
  * Set the edge sensitivity on an up counting source.
  * Set the up source to either detect rising edges or falling edges.
  */
-void Counter::SetUpSourceEdge(bool risingEdge, bool fallingEdge)
+void MetroCounter::SetUpSourceEdge(bool risingEdge, bool fallingEdge)
 {
 	if (StatusIsFatal()) return;
 	if (m_upSource == NULL)
@@ -296,7 +296,7 @@ void Counter::SetUpSourceEdge(bool risingEdge, bool fallingEdge)
 /**
  * Disable the up counting source to the counter.
  */
-void Counter::ClearUpSource()
+void MetroCounter::ClearUpSource()
 {
 	if (StatusIsFatal()) return;
 	if (m_allocatedUpSource)
@@ -321,7 +321,7 @@ void Counter::ClearUpSource()
  * Set the down counting source to be a digital input channel.
  * The slot will be set to the default digital module slot.
  */
-void Counter::SetDownSource(UINT32 channel)
+void MetroCounter::SetDownSource(UINT32 channel)
 {
 	if (StatusIsFatal()) return;
 	SetDownSource(new DigitalInput(channel));
@@ -334,7 +334,7 @@ void Counter::SetDownSource(UINT32 channel)
  * @param moduleNumber The digital module (1 or 2).
  * @param channel The digital channel (1..14).
  */
-void Counter::SetDownSource(UINT8 moduleNumber, UINT32 channel)
+void MetroCounter::SetDownSource(UINT8 moduleNumber, UINT32 channel)
 {
 	if (StatusIsFatal()) return;
 	SetDownSource(new DigitalInput(moduleNumber, channel));
@@ -346,7 +346,7 @@ void Counter::SetDownSource(UINT8 moduleNumber, UINT32 channel)
  * @param analogTrigger The analog trigger object that is used for the Down Source
  * @param triggerType The analog trigger output that will trigger the counter.
  */
-void Counter::SetDownSource(AnalogTrigger *analogTrigger, AnalogTriggerOutput::Type triggerType)
+void MetroCounter::SetDownSource(AnalogTrigger *analogTrigger, AnalogTriggerOutput::Type triggerType)
 {
 	if (StatusIsFatal()) return;
 	SetDownSource(analogTrigger->CreateOutput(triggerType));
@@ -358,7 +358,7 @@ void Counter::SetDownSource(AnalogTrigger *analogTrigger, AnalogTriggerOutput::T
  * @param analogTrigger The analog trigger object that is used for the Down Source
  * @param triggerType The analog trigger output that will trigger the counter.
  */
-void Counter::SetDownSource(AnalogTrigger &analogTrigger, AnalogTriggerOutput::Type triggerType)
+void MetroCounter::SetDownSource(AnalogTrigger &analogTrigger, AnalogTriggerOutput::Type triggerType)
 {
 	SetDownSource(&analogTrigger, triggerType);
 }
@@ -367,7 +367,7 @@ void Counter::SetDownSource(AnalogTrigger &analogTrigger, AnalogTriggerOutput::T
  * Set the source object that causes the counter to count down.
  * Set the down counting DigitalSource.
  */
-void Counter::SetDownSource(DigitalSource *source)
+void MetroCounter::SetDownSource(DigitalSource *source)
 {
 	if (StatusIsFatal()) return;
 	if (m_allocatedDownSource)
@@ -404,7 +404,7 @@ void Counter::SetDownSource(DigitalSource *source)
  * Set the source object that causes the counter to count down.
  * Set the down counting DigitalSource.
  */
-void Counter::SetDownSource(DigitalSource &source)
+void MetroCounter::SetDownSource(DigitalSource &source)
 {
 	SetDownSource(&source);
 }
@@ -413,7 +413,7 @@ void Counter::SetDownSource(DigitalSource &source)
  * Set the edge sensitivity on a down counting source.
  * Set the down source to either detect rising edges or falling edges.
  */
-void Counter::SetDownSourceEdge(bool risingEdge, bool fallingEdge)
+void MetroCounter::SetDownSourceEdge(bool risingEdge, bool fallingEdge)
 {
 	if (StatusIsFatal()) return;
 	if (m_downSource == NULL)
@@ -429,7 +429,7 @@ void Counter::SetDownSourceEdge(bool risingEdge, bool fallingEdge)
 /**
  * Disable the down counting source to the counter.
  */
-void Counter::ClearDownSource()
+void MetroCounter::ClearDownSource()
 {
 	if (StatusIsFatal()) return;
 	if (m_allocatedDownSource)
@@ -454,7 +454,7 @@ void Counter::ClearDownSource()
  * Set standard up / down counting mode on this counter.
  * Up and down counts are sourced independently from two inputs.
  */
-void Counter::SetUpDownCounterMode()
+void MetroCounter::SetUpDownCounterMode()
 {
 	if (StatusIsFatal()) return;
 	tRioStatusCode localStatus = NiFpga_Status_Success;
@@ -467,7 +467,7 @@ void Counter::SetUpDownCounterMode()
  * Counts are sourced on the Up counter input.
  * The Down counter input represents the direction to count.
  */
-void Counter::SetExternalDirectionMode()
+void MetroCounter::SetExternalDirectionMode()
 {
 	if (StatusIsFatal()) return;
 	tRioStatusCode localStatus = NiFpga_Status_Success;
@@ -479,7 +479,7 @@ void Counter::SetExternalDirectionMode()
  * Set Semi-period mode on this counter.
  * Counts up on both rising and falling edges. 
  */
-void Counter::SetSemiPeriodMode(bool highSemiPeriod)
+void MetroCounter::SetSemiPeriodMode(bool highSemiPeriod)
 {
 	if (StatusIsFatal()) return;
 	tRioStatusCode localStatus = NiFpga_Status_Success;
@@ -494,7 +494,7 @@ void Counter::SetSemiPeriodMode(bool highSemiPeriod)
  * This mode is most useful for direction sensitive gear tooth sensors.
  * @param threshold The pulse length beyond which the counter counts the opposite direction.  Units are seconds.
  */
-void Counter::SetPulseLengthMode(float threshold)
+void MetroCounter::SetPulseLengthMode(float threshold)
 {
 	if (StatusIsFatal()) return;
 	tRioStatusCode localStatus = NiFpga_Status_Success;
@@ -508,7 +508,7 @@ void Counter::SetPulseLengthMode(float threshold)
  * This enables the counter and it starts accumulating counts from the associated
  * input channel. The counter value is not reset on starting, and still has the previous value.
  */
-void Counter::Start()
+void MetroCounter::Start()
 {
 	if (StatusIsFatal()) return;
 	tRioStatusCode localStatus = NiFpga_Status_Success;
@@ -521,7 +521,7 @@ void Counter::Start()
  * Read the value at this instant. It may still be running, so it reflects the current value. Next
  * time it is read, it might have a different value.
  */
-INT32 Counter::Get()
+INT32 MetroCounter::Get()
 {
 	if (StatusIsFatal()) return 0;
 	tRioStatusCode localStatus = NiFpga_Status_Success;
@@ -535,7 +535,7 @@ INT32 Counter::Get()
  * Set the counter value to zero. This doesn't effect the running state of the counter, just sets
  * the current value to zero.
  */
-void Counter::Reset()
+void MetroCounter::Reset()
 {
 	if (StatusIsFatal()) return;
 	tRioStatusCode localStatus = NiFpga_Status_Success;
@@ -547,7 +547,7 @@ void Counter::Reset()
  * Stop the Counter.
  * Stops the counting but doesn't effect the current value.
  */
-void Counter::Stop()
+void MetroCounter::Stop()
 {
 	if (StatusIsFatal()) return;
 	tRioStatusCode localStatus = NiFpga_Status_Success;
@@ -561,7 +561,7 @@ void Counter::Stop()
  * to determine shaft speed.
  * @returns The period of the last two pulses in units of seconds.
  */
-double Counter::GetPeriod()
+double MetroCounter::GetPeriod()
 {
 	if (StatusIsFatal()) return 0.0;
 	tRioStatusCode localStatus = NiFpga_Status_Success;
@@ -589,7 +589,7 @@ double Counter::GetPeriod()
  * @param maxPeriod The maximum period where the counted device is considered moving in
  * seconds.
  */
-void Counter::SetMaxPeriod(double maxPeriod)
+void MetroCounter::SetMaxPeriod(double maxPeriod)
 {
 	if (StatusIsFatal()) return;
 	tRioStatusCode localStatus = NiFpga_Status_Success;
@@ -609,7 +609,7 @@ void Counter::SetMaxPeriod(double maxPeriod)
  * see the stopped bit become true (since it is updated at the end of an average and there are
  * no samples to average).
  */
-void Counter::SetUpdateWhenEmpty(bool enabled)
+void MetroCounter::SetUpdateWhenEmpty(bool enabled)
 {
 	if (StatusIsFatal()) return;
 	tRioStatusCode localStatus = NiFpga_Status_Success;
@@ -625,7 +625,7 @@ void Counter::SetUpdateWhenEmpty(bool enabled)
  * @return Returns true if the most recent counter period exceeds the MaxPeriod value set by
  * SetMaxPeriod.
  */
-bool Counter::GetStopped()
+bool MetroCounter::GetStopped()
 {
 	if (StatusIsFatal()) return false;
 	tRioStatusCode localStatus = NiFpga_Status_Success;
@@ -637,7 +637,7 @@ bool Counter::GetStopped()
  * The last direction the counter value changed.
  * @return The last direction the counter value changed.
  */
-bool Counter::GetDirection()
+bool MetroCounter::GetDirection()
 {
 	if (StatusIsFatal()) return false;
 	tRioStatusCode localStatus = NiFpga_Status_Success;
@@ -652,7 +652,7 @@ bool Counter::GetDirection()
  * quadrature encoding only. Any other counter mode isn't supported.
  * @param reverseDirection true if the value counted should be negated.
  */
-void Counter::SetReverseDirection(bool reverseDirection)
+void MetroCounter::SetReverseDirection(bool reverseDirection)
 {
 	if (StatusIsFatal()) return;
 	tRioStatusCode localStatus = NiFpga_Status_Success;
@@ -666,7 +666,7 @@ void Counter::SetReverseDirection(bool reverseDirection)
 	wpi_setError(localStatus);
 }
 
-void Counter::SetAverageSize(int averageSize)
+void MetroCounter::SetAverageSize(int averageSize)
 {
 	if (StatusIsFatal()) return false;
 	tRioStatusCode localStatus = NiFpga_Status_Success;
@@ -679,7 +679,7 @@ void Counter::SetAverageSize(int averageSize)
  * The last direction the counter value changed.
  * @return The last direction the counter value changed.
  */
-int Counter::GetAverageSize()
+int MetroCounter::GetAverageSize()
 {
 	if (StatusIsFatal()) return false;
 	tRioStatusCode localStatus = NiFpga_Status_Success;
@@ -689,30 +689,30 @@ int Counter::GetAverageSize()
 }
 
 
-void Counter::UpdateTable() {
+void MetroCounter::UpdateTable() {
 	if (m_table != NULL) {
 		m_table->PutNumber("Value", Get());
 	}
 }
 
-void Counter::StartLiveWindowMode() {
+void MetroCounter::StartLiveWindowMode() {
 	
 }
 
-void Counter::StopLiveWindowMode() {
+void MetroCounter::StopLiveWindowMode() {
 	
 }
 
-std::string Counter::GetSmartDashboardType() {
+std::string MetroCounter::GetSmartDashboardType() {
 	return "Counter";
 }
 
-void Counter::InitTable(ITable *subTable) {
+void MetroCounter::InitTable(ITable *subTable) {
 	m_table = subTable;
 	UpdateTable();
 }
 
-ITable * Counter::GetTable() {
+ITable * MetroCounter::GetTable() {
 	return m_table;
 }
 
