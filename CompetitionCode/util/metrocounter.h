@@ -4,8 +4,8 @@
 /* must be accompanied by the FIRST BSD license file in $(WIND_BASE)/WPILib.  */
 /*----------------------------------------------------------------------------*/
 
-#ifndef CPPCOUNTER_H_
-#define CPPCOUNTER_H_
+#ifndef METROCOUNTER_H_
+#define METROCOUNTER_H_
 
 #include "AnalogTriggerOutput.h"
 #include "CounterBase.h"
@@ -18,7 +18,7 @@
  * of counts, the period of the most recent cycle, and detect when the signal being counted
  * has stopped by supplying a maximum cycle time.
  */
-class Counter : public SensorBase, public CounterBase, public LiveWindowSendable
+class MetroCounter : public SensorBase, public CounterBase, public LiveWindowSendable
 {
 public:
 	typedef enum {kTwoPulse=0, kSemiperiod=1, kPulseLength=2, kExternalDirection=3} Mode;
