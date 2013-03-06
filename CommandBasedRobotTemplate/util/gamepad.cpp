@@ -4,6 +4,10 @@
 GamePad::GamePad(int port){
 	
 	joystick_ = new Joystick( port );
+	dPadLeftDownEvent = false;
+	dPadRightDownEvent = false;
+	dPadLeftOld = false;
+	dPadRightOld = false;
 		
 	for( int i = 0; i < MAX_NUM_BUTTONS; i++ ){
 			
@@ -51,10 +55,14 @@ void GamePad::Update(){
         downEventStates[i] = newBtnStates[i] && !oldBtnStates[i];
         
         oldBtnStates[i] = newBtnStates[i];
-
             
     }
 
+	dPadLeftDownEvent = (joystick_->GetRawAxis(GamePad::DPAD_X) < 0.0) && !dPadLeftOld;
+	dPadRightDownEvent = (joystick_->GetRawAxis(GamePad::DPAD_X) > 0.0) && !dPadRightOld;
+	dPadLeftOld = joystick_->GetRawAxis(GamePad::DPAD_X) < 0.0;
+	dPadRightOld = joystick_->GetRawAxis(GamePad::DPAD_X) > 0.0;
+	
 }
 
 bool GamePad::GetButton( int button ){
@@ -75,7 +83,13 @@ bool GamePad::GetButtonUp( int button ){
 
 }
 
+bool GamePad::GetDPadLeftDown(){
+	return dPadLeftDownEvent;
+}
 
+bool GamePad::GetDPadRightDown(){
+	return dPadLeftDownEvent;
+}
 
 
 

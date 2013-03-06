@@ -63,7 +63,7 @@ private:
 		
 		drive = new Drive( flMotor, blMotor, frMotor, brMotor, flEncoder, blEncoder, frEncoder, brEncoder, gyro );
 		drive->SetInvertedMotors( false, false, true, true );
-		
+
 		shooter = new Shooter( shooterMotor, loaderRelay, shooterCounter );
 		
 		ds = DriverStationLCD::GetInstance();
@@ -86,6 +86,7 @@ private:
 		Disable();
 		step = 0;
 		timer->Reset();
+		drive->ResetGyro();
 	}
 	
 	virtual void AutonomousPeriodic() {
@@ -95,6 +96,7 @@ private:
 		case ShootScript:
 			switch (step){
 			case 0:
+				drive->ResetGyro( 270.0 );
 				shooter->SetPID( false );
 				shooter->SetShooterSpeed( Shooter::SETPOINT_VOLTAGE );
 				if( timer->Get() >= 0.0 ){ step++; timer->Reset(); }
@@ -197,6 +199,13 @@ private:
 		}
 		drive->SetHoldAngle( driverGamePad->GetButton( GamePad::RIGHT_JS ) || driverGamePad->GetButton( GamePad::B ) );					
 
+		if(driverGamePad->GetDPadLeftDown()){
+			drive->SetAimBias(drive->GetAimBias() - Drive::AIM_BIAS_INCREMENT);
+		}
+		if(driverGamePad->GetDPadRightDown()){
+			drive->SetAimBias(drive->GetAimBias() + Drive::AIM_BIAS_INCREMENT);
+		}
+		
 		/*
 		 * Loader Control
 		 * RB: Hold to run Forward
@@ -318,15 +327,12 @@ private:
 	void PrintToDS(){
 		
 		ds->Clear();
-		//ds->Printf(DriverStationLCD::kUser_Line1, 1, "Auton: %s", script == ShootScript ? "Shoot" : ( script == DriveScript ? "Drive(test)" : ( script == NoScript ? "None" : "YOU BROKE IT" ) ) );
-		//ds->Printf(DriverStationLCD::kUser_Line2, 1, "net: %f", fmod(fabs(drive->GetGyroAngle()-drive->targetAngle), 360.0) );
-		//ds->Printf(DriverStationLCD::kUser_Line3, 1, "PID: %s, FO: %s", drive->IsPIDControl() ? "On" : "Off", drive->IsFieldOriented() ? "On" : "Off" );
-		ds->Printf(DriverStationLCD::kUser_Line1, 1, "lim: %s", netLimit->Get() ? "True" : "False");
-		ds->Printf(DriverStationLCD::kUser_Line2, 1, "%s, %f", HasTarget() ? "Has Target" : "No Target", freshness->Get());
-		ds->Printf(DriverStationLCD::kUser_Line3, 1, "Target Angle: %f", GetRelativeAngle() );
-		ds->Printf(DriverStationLCD::kUser_Line4, 1, "Shooter PID: %s", shooter->IsPID() ? "On" : "Off");
-		ds->Printf(DriverStationLCD::kUser_Line5, 1, "Shooter SET: %f", shooter->GetSetpoint() );
-		ds->Printf(DriverStationLCD::kUser_Line6, 1, "Shooter REAL: %f", shooter->GetActualSpeed() );
+		ds->Printf(DriverStationLCD::kUser_Line1, 1, "Auto: %s", script == ShootScript ? "Shoot" : ( script == DriveScript ? "Drive(test)" : ( script == NoScript ? "None" : "YOU BROKE IT" ) ) );
+		ds->Printf(DriverStationLCD::kUser_Line2, 1, "Dr: %s%s%f", drive->IsPIDControl() ? "PID, " : "", drive->IsFieldOriented() ? "FO" : "", drive->GetGyroAngle() );
+		ds->Printf(DriverStationLCD::kUser_Line3, 1, "Vi: %s, Fresh:%f", HasTarget() ? "Y" : "N", freshness->Get() );
+		ds->Printf(DriverStationLCD::kUser_Line4, 1, "Bias: %f", drive->GetAimBias() );
+		ds->Printf(DriverStationLCD::kUser_Line5, 1, "Sh: %sSET: %f", shooter->IsPID() ? "P, " : "", shooter->GetSetpoint() );
+		ds->Printf(DriverStationLCD::kUser_Line6, 1, "Sh REAL: %f", shooter->GetActualSpeed() );
 		ds->UpdateLCD();
 		
 	}

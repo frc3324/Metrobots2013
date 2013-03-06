@@ -13,6 +13,8 @@ class GamePad {
 		bool GetButton( int button );
 		bool GetButtonDown( int button );
 		bool GetButtonUp( int button );
+		bool GetDPadLeftDown();
+		bool GetDPadRightDown();
 
 		static const double AXIS_DEADBAND = 0.10;
 		
@@ -42,6 +44,10 @@ class GamePad {
 		bool newBtnStates[ MAX_NUM_BUTTONS ];
 		bool upEventStates[ MAX_NUM_BUTTONS ];
 		bool downEventStates[ MAX_NUM_BUTTONS ];
+		bool dPadLeftDownEvent;
+		bool dPadRightDownEvent;
+		bool dPadLeftOld;
+		bool dPadRightOld;
 
 };
 
