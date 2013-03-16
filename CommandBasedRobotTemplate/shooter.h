@@ -21,16 +21,18 @@ class Shooter {
 		void Actuate();
 		void Disable();
 		
-		static const double PID_P = 0.0;
+		static const double PID_P = 1.0 / 4000.0;
 		static const double PID_I = 0.0;
-		static const double PID_D = 0.0;
+		static const double PID_D = 1.0 / 4000.0;
 
 		static const double MAX_RPM = 3800.0;
-		static const double SPUN_UP_TOLERENCE = 200.0;
+		static const double SPUN_UP_TOLERENCE = 50.0;
 		static const double SETPOINT_RPM = 3500.0;
 		static const double SETPOINT_VOLTAGE = 1.0;
+		static const double RAMP_TIPPING_POINT = 1500.0;
+		static const double RAMP_VOLTAGE_CAP = 0.5;
 		
-	private:
+	//private:
 		SpeedController *motor;
 		DualRelay *loader;
 		Counter *counter;

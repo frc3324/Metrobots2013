@@ -29,8 +29,6 @@ class Drive {
 		bool IsSlowDrive();
 		void SetSlowDrive( bool value );
 		void SetInvertedMotors( bool fl, bool bl, bool fr, bool br );
-		void SetAimBias(double value);
-		double GetAimBias();
 		
 		static const double PID_P = 1.0;
 		static const double PID_I = 0.0;
@@ -43,7 +41,7 @@ class Drive {
 		static const double VEL_PID_MULTIPLIER = 1600;
 		
 		static const double ANGLE_P = -1.0/45.0; 
-		static const double AIM_BIAS_INCREMENT = 10.0;
+		static const double AIM_BIAS_INCREMENT = 20.0;
 		
 		static const double SLOW_DRIVE_MULTIPLIER = 0.4;
 		Encoder *flEncoder, *blEncoder, *frEncoder, *brEncoder;
@@ -57,7 +55,7 @@ class Drive {
 		
 		double driverX, driverY, driverTurn, targetAngle;
 		int motorInverters[4];
-		double gyroBias, aimBias;
+		double gyroBias;
 		
 		bool isPIDControl;
 		bool isSlowDrive;

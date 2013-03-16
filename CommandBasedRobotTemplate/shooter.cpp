@@ -66,7 +66,7 @@ double Shooter::GetActualSpeed(){
 
 void Shooter::Actuate(){
 	
-	actualSpeed = 30.0 / counter->GetPeriod();
+	actualSpeed = 60.0 / counter->GetPeriod();
 	shooterPID->SetSource( actualSpeed );
 	shooterPID->SetSetpoint( shooterSpeed );
 	
@@ -76,6 +76,10 @@ void Shooter::Actuate(){
 		
 		setSpeed = shooterPID->GetOutput();
 		
+	}
+	
+	if(actualSpeed < Shooter::RAMP_TIPPING_POINT){
+		//setSpeed = min(setSpeed, Shooter::RAMP_VOLTAGE_CAP);
 	}
 	
 	motor->Set( setSpeed );

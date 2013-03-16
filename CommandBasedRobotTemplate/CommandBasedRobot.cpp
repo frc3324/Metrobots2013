@@ -31,7 +31,7 @@ private:
 	Shooter *shooter;
 	
 	DriverStationLCD *ds;
-	NetworkTable *table;
+	//NetworkTable *table;
 	
 	virtual void RobotInit() {
 		
@@ -68,9 +68,9 @@ private:
 		
 		ds = DriverStationLCD::GetInstance();
 
-		table = NetworkTable::GetTable("net");
-		//net->PutNumber("angle", 0.0);
-		//net->PutBoolean("hasAngle", 0.0);
+		//table = NetworkTable::GetTable("net");
+		////net->PutNumber("angle", 0.0);
+		////net->PutBoolean("hasAngle", 0.0);
 		
 		script = ShootScript;
 		step = 0;
@@ -97,15 +97,22 @@ private:
 			switch (step){
 			case 0:
 				drive->ResetGyro( 270.0 );
-				shooter->SetPID( false );
-				shooter->SetShooterSpeed( Shooter::SETPOINT_VOLTAGE );
+				shooter->SetPID( true );
+				shooter->SetShooterSpeed( Shooter::SETPOINT_RPM );
 				if( timer->Get() >= 0.0 ){ step++; timer->Reset(); }
 				break;
 			case 1:
 				shooter->ShootWhenSpunUp();
-				if( timer->Get() >= 15.0 ){ step++; timer->Reset(); }
+				if( timer->Get() >= 7.0 ){ step++; timer->Reset(); }
 				break;
 			case 2:
+				shooter->SetPID(false);
+				shooter->SetShooterSpeed(Shooter::SETPOINT_VOLTAGE);
+				if( timer->Get() >= 1.0 ){ step++; timer->Reset(); }
+			case 3:
+				shooter->SetLoaderDirection(Relay::kForward);
+				if( timer->Get() >= 6.0 ){ step++; timer->Reset(); }
+			default:
 				shooter->Disable();
 			}
 			break;
@@ -197,15 +204,14 @@ private:
 		if( driverGamePad->GetButton/*Down*/( GamePad::B ) ){	
 			drive->SetTargetAngle( HasTarget() ? GetAbsoluteAngle() : drive->GetGyroAngle() );			
 		}
-		drive->SetHoldAngle( driverGamePad->GetButton( GamePad::RIGHT_JS ) || driverGamePad->GetButton( GamePad::B ) );					
+		drive->SetHoldAngle( driverGamePad->GetButton( GamePad::RIGHT_JS ) || driverGamePad->GetButton( GamePad::B ) || driverGamePad->GetAxis(GamePad::DPAD_X) != 0.0 );					
 
 		if(driverGamePad->GetDPadLeftDown()){
-			drive->SetAimBias(drive->GetAimBias() - Drive::AIM_BIAS_INCREMENT);
+			drive->SetTargetAngle( drive->GetGyroAngle() - Drive::AIM_BIAS_INCREMENT);
 		}
 		if(driverGamePad->GetDPadRightDown()){
-			drive->SetAimBias(drive->GetAimBias() + Drive::AIM_BIAS_INCREMENT);
+			drive->SetTargetAngle( drive->GetGyroAngle() + Drive::AIM_BIAS_INCREMENT);
 		}
-		
 		/*
 		 * Loader Control
 		 * RB: Hold to run Forward
@@ -230,6 +236,7 @@ private:
 		 */
 		if( shooterGamePad->GetButtonDown( GamePad::B ) ){
 			shooter->SetShooterSpeed( 0.0 );
+			shooter->SetPID(false);
 		}
 		
 		/*
@@ -297,7 +304,7 @@ private:
 		if( shooterGamePad->GetButtonDown( GamePad::X ) ){
 			script = DriveScript;
 		}
-		
+				
 		PrintToDS();
 		
 	}
@@ -328,9 +335,9 @@ private:
 		
 		ds->Clear();
 		ds->Printf(DriverStationLCD::kUser_Line1, 1, "Auto: %s", script == ShootScript ? "Shoot" : ( script == DriveScript ? "Drive(test)" : ( script == NoScript ? "None" : "YOU BROKE IT" ) ) );
-		ds->Printf(DriverStationLCD::kUser_Line2, 1, "Dr: %s%s%f", drive->IsPIDControl() ? "PID, " : "", drive->IsFieldOriented() ? "FO" : "", drive->GetGyroAngle() );
-		ds->Printf(DriverStationLCD::kUser_Line3, 1, "Vi: %s, Fresh:%f", HasTarget() ? "Y" : "N", freshness->Get() );
-		ds->Printf(DriverStationLCD::kUser_Line4, 1, "Bias: %f", drive->GetAimBias() );
+		ds->Printf(DriverStationLCD::kUser_Line2, 1, "Dr: %s%s%f", drive->IsPIDControl() ? "PID, " : "", drive->IsFieldOriented() ? "FO, " : "", drive->GetGyroAngle() );
+		ds->Printf(DriverStationLCD::kUser_Line3, 1, "Vi: %s, Fresh: %f", HasTarget() ? "Y" : "N", freshness->Get() );
+		ds->Printf(DriverStationLCD::kUser_Line4, 1, "" );
 		ds->Printf(DriverStationLCD::kUser_Line5, 1, "Sh: %sSET: %f", shooter->IsPID() ? "P, " : "", shooter->GetSetpoint() );
 		ds->Printf(DriverStationLCD::kUser_Line6, 1, "Sh REAL: %f", shooter->GetActualSpeed() );
 		ds->UpdateLCD();
@@ -338,23 +345,23 @@ private:
 	}
 	
 	double GetAbsoluteAngle() {
-		return table->GetNumber("angle", 0.0) + drive->GetGyroAngle();
+		return /*table->GetNumber("angle", 0.0) +*/ drive->GetGyroAngle();
 	}
 	
 	double GetRelativeAngle() {
-		return table->GetNumber("angle", 0.0);
+		return 0.0;//table->GetNumber("angle", 0.0);
 	}
 	
 	bool HasTarget(){
-		return table->GetBoolean("hasTarget", false);
+		return false;//table->GetBoolean("hasTarget", false);
 	}
 	
 	bool IsFreshTarget() {
-		bool isFresh = table->GetBoolean("isFresh", false);
+		bool isFresh = false;//table->GetBoolean("isFresh", false);
 		if(isFresh) {
 			freshness->Reset();
 		}
-		table->PutBoolean("isFresh", false);
+		//table->PutBoolean("isFresh", false);
 		return isFresh;
 	}
 	

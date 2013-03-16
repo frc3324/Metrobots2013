@@ -42,7 +42,6 @@ Drive::Drive( SpeedController *flMotor_, SpeedController *blMotor_, SpeedControl
 	motorInverters[3] = 1;
 	
 	gyroBias = 0.0;
-	aimBias = 0.0;
 	
 	isPIDControl = false;
 	isSlowDrive = false;
@@ -85,7 +84,7 @@ void Drive::Actuate(){
 	if( isHoldAngle ){
 	
 		double gyroAngle = fmod( GetGyroAngle(), 360.0 );
-		double relativeAngle = gyroAngle - (targetAngle - aimBias);
+		double relativeAngle = gyroAngle - targetAngle;
 		
 		if( relativeAngle > 180 ){
 		
@@ -206,17 +205,9 @@ void Drive::ResetGyro( double bias ){
 
 }
 
-void Drive::SetAimBias(double value){
-	aimBias = value;
-}
-
-double Drive::GetAimBias(){
-	return aimBias;
-}
-
 double Drive::GetGyroAngle(){
 
-	return gyro->GetAngle() - gyroBias;
+	return gyro->GetAngle() + gyroBias;
 
 }
 

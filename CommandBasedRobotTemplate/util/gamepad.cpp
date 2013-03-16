@@ -58,10 +58,10 @@ void GamePad::Update(){
             
     }
 
-	dPadLeftDownEvent = (joystick_->GetRawAxis(GamePad::DPAD_X) < 0.0) && !dPadLeftOld;
 	dPadRightDownEvent = (joystick_->GetRawAxis(GamePad::DPAD_X) > 0.0) && !dPadRightOld;
-	dPadLeftOld = joystick_->GetRawAxis(GamePad::DPAD_X) < 0.0;
+	dPadLeftDownEvent = (joystick_->GetRawAxis(GamePad::DPAD_X) < 0.0) && !dPadLeftOld;
 	dPadRightOld = joystick_->GetRawAxis(GamePad::DPAD_X) > 0.0;
+	dPadLeftOld = joystick_->GetRawAxis(GamePad::DPAD_X) < 0.0;
 	
 }
 
@@ -88,7 +88,7 @@ bool GamePad::GetDPadLeftDown(){
 }
 
 bool GamePad::GetDPadRightDown(){
-	return dPadLeftDownEvent;
+	return dPadRightDownEvent;
 }
 
 
