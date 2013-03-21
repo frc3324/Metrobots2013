@@ -97,21 +97,17 @@ private:
 			switch (step){
 			case 0:
 				drive->ResetGyro( 270.0 );
-				shooter->SetPID( true );
-				shooter->SetShooterSpeed( Shooter::SETPOINT_RPM );
+				shooter->SetPID( false );
+				shooter->SetShooterSpeed( Shooter::SETPOINT_VOLTAGE );
 				if( timer->Get() >= 0.0 ){ step++; timer->Reset(); }
 				break;
 			case 1:
 				shooter->ShootWhenSpunUp();
-				if( timer->Get() >= 7.0 ){ step++; timer->Reset(); }
+				if( timer->Get() >= 12.0 ){ step++; timer->Reset(); }
 				break;
 			case 2:
-				shooter->SetPID(false);
-				shooter->SetShooterSpeed(Shooter::SETPOINT_VOLTAGE);
-				if( timer->Get() >= 1.0 ){ step++; timer->Reset(); }
-			case 3:
 				shooter->SetLoaderDirection(Relay::kForward);
-				if( timer->Get() >= 6.0 ){ step++; timer->Reset(); }
+				break;
 			default:
 				shooter->Disable();
 			}

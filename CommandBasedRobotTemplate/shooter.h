@@ -27,6 +27,7 @@ class Shooter {
 
 		static const double MAX_RPM = 3800.0;
 		static const double SPUN_UP_TOLERENCE = 50.0;
+		static const double SPIN_UP_RPM = 3500.0;
 		static const double SETPOINT_RPM = 3500.0;
 		static const double SETPOINT_VOLTAGE = 1.0;
 		static const double RAMP_TIPPING_POINT = 1500.0;
