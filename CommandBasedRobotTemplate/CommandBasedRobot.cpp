@@ -92,8 +92,7 @@ private:
 	virtual void AutonomousPeriodic() {
 		PrintToDS();
 		
-		switch (script){
-		case ShootScript:
+		//if (script == ShootScript) {
 			switch (step){
 			case 0:
 				drive->ResetGyro( 270.0 );
@@ -110,9 +109,9 @@ private:
 				break;
 			default:
 				shooter->Disable();
+				break;
 			}
-			break;
-		case DriveScript:
+		/*} else if (script == DriveScript) {
 			switch (step){
 			case 0:
 				drive->SetPIDControl(false);
@@ -136,9 +135,7 @@ private:
 				step++;
 				break;
 			}
-		case NoScript:
-			break;
-		}
+		}*/
 		
 		Actuate();
 	}
