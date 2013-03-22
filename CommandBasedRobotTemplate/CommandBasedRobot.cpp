@@ -91,6 +91,7 @@ private:
 	
 	virtual void AutonomousPeriodic() {
 		PrintToDS();
+		drive->Disable();
 		
 		//if (script == ShootScript) {
 			switch (step){
