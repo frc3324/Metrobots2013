@@ -92,6 +92,11 @@ private:
 	virtual void AutonomousPeriodic() {
 		PrintToDS();
 		drive->Disable();
+
+		flMotor->Set(0.0);
+		blMotor->Set(0.0);
+		frMotor->Set(0.0);
+		brMotor->Set(0.0);
 		
 		//if (script == ShootScript) {
 			switch (step){

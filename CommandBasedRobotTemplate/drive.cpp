@@ -47,7 +47,10 @@ Drive::Drive( SpeedController *flMotor_, SpeedController *blMotor_, SpeedControl
 	isSlowDrive = false;
 	isFieldOriented = true;
 	isHoldAngle = false;
-
+	
+	driverX = 0.0;
+	driverY = 0.0;
+	driverTurn = 0.0;
 }
 
 void Drive::Actuate(){
