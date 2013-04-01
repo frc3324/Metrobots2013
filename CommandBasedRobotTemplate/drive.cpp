@@ -144,6 +144,10 @@ void Drive::Disable(){
 	frMotor->Set( 0.0 );
 	brMotor->Set( 0.0 );
 
+	driverX = 0.0;
+	driverY = 0.0;
+	driverTurn = 0.0;
+
 }
 
 void Drive::SetMecanumXYTurn( double x, double y, double turn ){

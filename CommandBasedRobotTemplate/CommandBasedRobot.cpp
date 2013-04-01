@@ -25,7 +25,6 @@ private:
 	Encoder *flEncoder, *blEncoder, *frEncoder, *brEncoder; 
 	Gyro *gyro;
 	GamePad *driverGamePad;
-	GamePad *shooterGamePad;
 	
 	Drive *drive;
 	Shooter *shooter;
@@ -57,9 +56,7 @@ private:
 		gyro = new Gyro( 1 );
 		gyro->Reset();
 
-		driverGamePad = new GamePad( 1 );
-		shooterGamePad = new GamePad( 2 );
-		
+		driverGamePad = new GamePad( 1 );		
 		
 		drive = new Drive( flMotor, blMotor, frMotor, brMotor, flEncoder, blEncoder, frEncoder, brEncoder, gyro );
 		drive->SetInvertedMotors( false, false, true, true );
@@ -182,7 +179,7 @@ private:
 		 * X: Press to toggle ON
 		 * Y: Press to toggle OFF
 		 */
-		drive->SetPIDControl( driverGamePad->GetButtonDown( GamePad::X ) ? true : ( driverGamePad->GetButtonDown( GamePad::Y ) ? false : drive->IsPIDControl() ) );
+		drive->SetPIDControl( false/*driverGamePad->GetButtonDown( GamePad::X ) ? true : ( driverGamePad->GetButtonDown( GamePad::Y ) ? false : drive->IsPIDControl() )*/ );
 		
 		/*
 		 * Mecanum Drive
@@ -200,10 +197,10 @@ private:
 		if( driverGamePad->GetButtonDown( GamePad::RIGHT_JS ) ){	
 			drive->SetTargetAngle( drive->GetGyroAngle() );			
 		}
-		if( driverGamePad->GetButton/*Down*/( GamePad::B ) ){	
-			drive->SetTargetAngle( HasTarget() ? GetAbsoluteAngle() : drive->GetGyroAngle() );			
-		}
-		drive->SetHoldAngle( driverGamePad->GetButton( GamePad::RIGHT_JS ) || driverGamePad->GetButton( GamePad::B ) || driverGamePad->GetAxis(GamePad::DPAD_X) != 0.0 );					
+		//if( driverGamePad->GetButton( GamePad::B ) ){	
+		//	drive->SetTargetAngle( HasTarget() ? GetAbsoluteAngle() : drive->GetGyroAngle() );			
+		//}
+		drive->SetHoldAngle( driverGamePad->GetButton( GamePad::RIGHT_JS ) || driverGamePad->GetAxis(GamePad::DPAD_X) != 0.0 );					
 
 		if(driverGamePad->GetDPadLeftDown()){
 			drive->SetTargetAngle( drive->GetGyroAngle() - Drive::AIM_BIAS_INCREMENT);
@@ -216,24 +213,24 @@ private:
 		 * RB: Hold to run Forward
 		 * LB: Hold to run Reverse
 		 */
-		shooter->SetLoaderDirection( shooterGamePad->GetButton( GamePad::RB ) ? Relay::kForward : ( shooterGamePad->GetButton( GamePad::LB ) ? Relay::kReverse : Relay::kOff ) );
-		netRelay->Set( (shooterGamePad->GetButton( GamePad::START ) && netLimit->Get()) ? Relay::kForward : ( shooterGamePad->GetButton( GamePad::BACK ) ? Relay::kReverse : Relay::kOff ) );
+		shooter->SetLoaderDirection( driverGamePad->GetAxis( GamePad::TRIGGER ) > 0.5 ? Relay::kForward : ( driverGamePad->GetAxis( GamePad::TRIGGER ) < -0.5 ? Relay::kReverse : Relay::kOff ) );
+		//netRelay->Set( (shooterGamePad->GetButton( GamePad::START ) && netLimit->Get()) ? Relay::kForward : ( shooterGamePad->GetButton( GamePad::BACK ) ? Relay::kReverse : Relay::kOff ) );
 
 		
 		/*
 		 * Shooter Setpoint with Speed Control
 		 * A: Press to enable
 		 */
-		if( shooterGamePad->GetButtonDown( GamePad::A ) ){
-			shooter->SetPID( true );
-			shooter->SetShooterSpeed( Shooter::SETPOINT_RPM );
-		}
+		//if( shooterGamePad->GetButtonDown( GamePad::A ) ){
+		//	shooter->SetPID( true );
+		//	shooter->SetShooterSpeed( Shooter::SETPOINT_RPM );
+		//}
 		
 		/*
 		 * Stop Shooter
 		 * B: Press to Stop Shooter
 		 */
-		if( shooterGamePad->GetButtonDown( GamePad::B ) ){
+		if( driverGamePad->GetButtonDown( GamePad::B ) ){
 			shooter->SetShooterSpeed( 0.0 );
 			shooter->SetPID(false);
 		}
@@ -242,7 +239,7 @@ private:
 		 * Shooter Setpoint with Straight Voltage
 		 * X: Press to enable
 		 */
-		if( shooterGamePad->GetButtonDown( GamePad::X ) ){
+		if( driverGamePad->GetButtonDown( GamePad::X ) ){
 			shooter->SetPID( false );
 			shooter->SetShooterSpeed( Shooter::SETPOINT_VOLTAGE );
 		}
@@ -251,7 +248,7 @@ private:
 		 * Shoot when Spun Up
 		 * Y: Hold to Shoot when spun up
 		 */
-		if( shooterGamePad->GetButton( GamePad::Y ) ){
+		if( driverGamePad->GetButton( GamePad::Y ) ){
 			shooter->ShootWhenSpunUp();
 		}
 
@@ -261,10 +258,10 @@ private:
 		 * LEFT_JS_BUTTON: Release to maintain current setpoint
 		 * LEFT_Y_AXIS: manualy set setpoint
 		 */
-		if( shooterGamePad->GetButton( GamePad::LEFT_JS ) ){
+		/*if( shooterGamePad->GetButton( GamePad::LEFT_JS ) ){
 			shooter->SetPID( true );
 			shooter->SetShooterSpeed( shooterGamePad->GetAxis( GamePad::LEFT_Y ) * Shooter::MAX_RPM );
-		}
+		}*/
 		
 		/*
 		 * Manual Setpoint with Straight Voltage
@@ -272,10 +269,10 @@ private:
 		 * RIGHT_JS_BUTTON: Release to maintain current setpoint
 		 * RIGHT_Y_AXIS: manualy set setpoint
 		 */
-		if( shooterGamePad->GetButton( GamePad::RIGHT_JS ) ){
+		/*if( shooterGamePad->GetButton( GamePad::RIGHT_JS ) ){
 			shooter->SetPID( false );
 			shooter->SetShooterSpeed( shooterGamePad->GetAxis( GamePad::RIGHT_Y ) );
-		}
+		}*/
 		
 		Actuate();
 		PrintToDS();
@@ -291,19 +288,6 @@ private:
 	virtual void DisabledPeriodic() {
 		
 		UpdateOI();
-		
-		if( shooterGamePad->GetButtonDown( GamePad::A ) ){
-			script = ShootScript;
-		}
-		
-		if( shooterGamePad->GetButtonDown( GamePad::B ) ){
-			script = NoScript;
-		}
-		
-		if( shooterGamePad->GetButtonDown( GamePad::X ) ){
-			script = DriveScript;
-		}
-				
 		PrintToDS();
 		
 	}
@@ -325,7 +309,6 @@ private:
 	void UpdateOI(){
 
 		driverGamePad->Update();
-		shooterGamePad->Update();
 		IsFreshTarget();
 		
 	}
