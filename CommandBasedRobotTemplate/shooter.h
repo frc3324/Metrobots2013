@@ -18,8 +18,8 @@ class Shooter {
 		bool IsPID();
 		double GetSetpoint();
 		double GetActualSpeed();
-		bool GetBangBangOn();
-		void SetBangBangOn(bool BangBangOn);
+		bool GetBangBang();
+		void SetBangBang(bool BangBang);
 		void Actuate();
 		void Disable();
 		
