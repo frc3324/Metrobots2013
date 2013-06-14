@@ -39,6 +39,14 @@ bool Shooter::IsSpunUp(){
 	return actualSpeed >= Shooter::SPIN_UP_RPM - Shooter::SPUN_UP_TOLERENCE;
 }
 
+bool shooter::GetBangBang() {
+	return isBangBang;
+}
+
+void shooter::SetBangBang(bool BangBang) {
+	isBangBang = BangBang;
+}
+
 void Shooter::SetPID( bool value ){
 	
 	isPID = value;
@@ -76,6 +84,8 @@ void Shooter::Actuate(){
 		
 		setSpeed = shooterPID->GetOutput();
 		
+	} else if (isBangBang) {
+		setSpeed = (actualSpeed >= shooterSpeed ? 0.0 : 1.0);
 	}
 	
 	if(actualSpeed < Shooter::RAMP_TIPPING_POINT){

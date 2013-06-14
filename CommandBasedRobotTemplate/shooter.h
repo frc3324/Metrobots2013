@@ -18,6 +18,8 @@ class Shooter {
 		bool IsPID();
 		double GetSetpoint();
 		double GetActualSpeed();
+		bool GetBangBangOn();
+		void SetBangBangOn(bool BangBangOn);
 		void Actuate();
 		void Disable();
 		
@@ -40,6 +42,7 @@ class Shooter {
 		MetroPIDController *shooterPID;
 		
 		bool isPID;
+		bool isBangBang;
 		double shooterSpeed;
 		double actualSpeed;
 		Relay::Value loaderDirection;
