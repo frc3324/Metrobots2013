@@ -4,10 +4,6 @@
 Atk3::Atk3(int port){
 	
 	joystick_ = new Joystick( port );
-	dPadLeftDownEvent = false;
-	dPadRightDownEvent = false;
-	dPadLeftOld = false;
-	dPadRightOld = false;
 		
 	for( int i = 0; i < MAX_NUM_BUTTONS; i++ ){
 			
