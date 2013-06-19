@@ -36,7 +36,11 @@ void Shooter::ShootWhenSpunUp(){
 }
 
 bool Shooter::IsSpunUp(){
-	return actualSpeed >= Shooter::SPIN_UP_RPM - Shooter::SPUN_UP_TOLERENCE;
+	if (isPID) {
+		return actualSpeed >= shooterSpeed - Shooter::SPUN_UP_TOLERANCE;
+	} else {
+		return actualSpeed >= Shooter::SPIN_UP_RPM - Shooter::SPUN_UP_TOLERENCE;
+	}
 }
 
 bool shooter::GetBangBang() {
