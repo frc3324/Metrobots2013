@@ -37,6 +37,8 @@ void Drive::Disable(){
 	frMotor->Set( 0.0 );
 	brMotor->Set( 0.0 );
 
+	driverLeft = 0.0;
+	driverRight = 0.0;
 }
 
 void Drive::SetLeftRight( double left, double right ){

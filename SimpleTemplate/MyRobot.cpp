@@ -63,12 +63,29 @@ private:
 	
 	virtual void AutonomousPeriodic() {
 		PrintToDS();
-		drive->Disable();
+		if (script == NoScript) {
+			drive->Disable();
 
-		flMotor->Set(0.0);
-		blMotor->Set(0.0);
-		frMotor->Set(0.0);
-		brMotor->Set(0.0);
+			flMotor->Set(0.0);
+			blMotor->Set(0.0);
+			frMotor->Set(0.0);
+			brMotor->Set(0.0);
+		} else if (script == TwoPointScript) {
+			if (step == 0) {
+				drive->SetLeftRight(-1.0, -1.0);
+				if (timer->Get() > 2.0) {
+					step += 1;
+					timer->Reset();
+				}
+			} else {
+				drive->Disable();
+
+				flMotor->Set(0.0);
+				blMotor->Set(0.0);
+				frMotor->Set(0.0);
+				brMotor->Set(0.0);
+			}
+		}
 		
 		Actuate();
 	}
@@ -150,14 +167,14 @@ private:
 	
 	void PrintToDS(){
 		
-		/*ds->Clear();
-		ds->Printf(DriverStationLCD::kUser_Line1, 1, "Auto: %s", script == ShootScript ? "Shoot" : ( script == DriveScript ? "Drive(test)" : ( script == NoScript ? "None" : "YOU BROKE IT" ) ) );
-		ds->Printf(DriverStationLCD::kUser_Line2, 1, "Dr: %s%s%f", drive->IsPIDControl() ? "PID, " : "", drive->IsFieldOriented() ? "FO, " : "", drive->GetGyroAngle() );
+		ds->Clear();
+		ds->Printf(DriverStationLCD::kUser_Line1, 1, "Auto: %s", script == NoScript ? "None" : ( script == TwoPointScript ? "2Point" : "YOU BROKE IT" ) );
+		/*ds->Printf(DriverStationLCD::kUser_Line2, 1, "Dr: %s%s%f", drive->IsPIDControl() ? "PID, " : "", drive->IsFieldOriented() ? "FO, " : "", drive->GetGyroAngle() );
 		ds->Printf(DriverStationLCD::kUser_Line3, 1, "Vi: %s, Fresh: %f", HasTarget() ? "Y" : "N", freshness->Get() );
 		ds->Printf(DriverStationLCD::kUser_Line4, 1, "" );
 		ds->Printf(DriverStationLCD::kUser_Line5, 1, "Sh: %sSET: %f", shooter->IsPID() ? "P, " : "", shooter->GetSetpoint() );
-		ds->Printf(DriverStationLCD::kUser_Line6, 1, "Sh REAL: %f", shooter->GetActualSpeed() );
-		ds->UpdateLCD();*/
+		ds->Printf(DriverStationLCD::kUser_Line6, 1, "Sh REAL: %f", shooter->GetActualSpeed() );*/
+		ds->UpdateLCD();
 		
 	}
 	
