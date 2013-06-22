@@ -11,7 +11,7 @@
 class CommandBasedRobot : public IterativeRobot {
 private:
 	
-	typedef enum {NoScript, ShootScript, DriveScript} AutonScript;
+	typedef enum {NoScript, ShootScript, BangBangScript} AutonScript;
 	AutonScript script;
 	int step;
 	Timer *timer, *freshness;
@@ -98,7 +98,7 @@ private:
 		frMotor->Set(0.0);
 		brMotor->Set(0.0);
 		
-		//if (script == ShootScript) {
+		if (script == ShootScript) {
 			switch (step){
 			case 0:
 				drive->ResetGyro( 270.0 );
@@ -117,31 +117,26 @@ private:
 				shooter->Disable();
 				break;
 			}
-		/*} else if (script == DriveScript) {
+		} else if (script == BangBangScript) {
 			switch (step){
 			case 0:
-				drive->SetPIDControl(false);
-				drive->SetFieldOriented(false);
-				drive->SetTargetAngle( drive->GetGyroAngle() + 90.0 );
-				drive->SetHoldAngle(true);
-				timer->Reset();
-				step++;
+				drive->ResetGyro( 270.0 );
+				shooter->SetPID( true );
+				shooter->SetShooterSpeed( Shooter::SETPOINT_RPM );
+				if( timer->Get() >= 0.0 ){ step++; timer->Reset(); }
 				break;
 			case 1:
-				if( timer->Get() > 2.0 || AngleDiff(drive->GetGyroAngle(), drive->targetAngle) < 5.0 ){ timer->Reset(); step++; }
+				shooter->ShootWhenSpunUp();
+				if( timer->Get() >= 12.0 ){ step++; timer->Reset(); }
 				break;
 			case 2:
-				drive->SetMecanumXYTurn( 0.0, 0.4, 0.0 );
-				if( drive->GetDistMoved() > 300 ){ timer->Reset(); step++; }
+				shooter->SetLoaderDirection(Relay::kForward);
 				break;
-			case 3:
-				drive->SetPIDControl( true );
-				drive->SetHoldAngle( false );
-				drive->SetMecanumXYTurn( 0.0, 0.0, 0.0 );
-				step++;
+			default:
+				shooter->Disable();
 				break;
 			}
-		}*/
+		}
 		
 		Actuate();
 	}
@@ -301,7 +296,7 @@ private:
 		}
 		
 		if( shooterGamePad->GetButtonDown( GamePad::X ) ){
-			script = DriveScript;
+			script = BangBangScript;
 		}
 				
 		PrintToDS();
@@ -333,7 +328,7 @@ private:
 	void PrintToDS(){
 		
 		ds->Clear();
-		ds->Printf(DriverStationLCD::kUser_Line1, 1, "Auto: %s", script == ShootScript ? "Shoot" : ( script == DriveScript ? "Drive(test)" : ( script == NoScript ? "None" : "YOU BROKE IT" ) ) );
+		ds->Printf(DriverStationLCD::kUser_Line1, 1, "Auto: %s", script == ShootScript ? "Shoot" : ( script == BangBangScript ? "BangBang" : ( script == NoScript ? "None" : "YOU BROKE IT" ) ) );
 		ds->Printf(DriverStationLCD::kUser_Line2, 1, "Dr: %s%s%f", drive->IsPIDControl() ? "PID, " : "", drive->IsFieldOriented() ? "FO, " : "", drive->GetGyroAngle() );
 		ds->Printf(DriverStationLCD::kUser_Line3, 1, "Vi: %s, Fresh: %f", HasTarget() ? "Y" : "N", freshness->Get() );
 		ds->Printf(DriverStationLCD::kUser_Line4, 1, "" );

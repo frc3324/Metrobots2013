@@ -43,14 +43,6 @@ bool Shooter::IsSpunUp(){
 	}
 }
 
-bool shooter::GetBangBang() {
-	return isBangBang;
-}
-
-void shooter::SetBangBang(bool BangBang) {
-	isBangBang = BangBang;
-}
-
 void Shooter::SetPID( bool value ){
 	
 	isPID = value;
